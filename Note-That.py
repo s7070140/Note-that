@@ -55,6 +55,7 @@ class MainApp(Tk):
 
     def __init__(self, *args, **kwargs):
         Tk.__init__(self, *args, **kwargs)
+        self.find_b = PhotoImage(file="Find_button.gif")
         self.window()
 
     def note_storage(self):
@@ -74,7 +75,7 @@ class MainApp(Tk):
             self.title_box.delete(0, END)
             self.note_box.delete('1.0', END)
             note_page = Notepage(note_text)
-            note_page.geometry('400x400+400+400')
+            note_page.geometry('400x400+450+90')
             note_page.title('New note' + ' ' + ':' + ' ' + title_name)
             note_page.note_pages(note_page)
             note_page.mainloop()
@@ -121,10 +122,11 @@ class MainApp(Tk):
         self.add_tag = Button(self, width=12, height=1, text="Add Tags",
                               bg='gray', relief=FLAT, font=('Arial', 13, 'bold'))
         self.add_tag.place(x=162, y=440)
-        self.find_note = Button(self, width=12, height=1, text="Find Note",
-                              bg='gray', relief=FLAT, font=('Arial', 13, 'bold')
-                                , command=self.find_notes)
-        self.find_note.place(x=305, y=440)
+        self.find_note = Button(self.header, image=self.find_b, relief=FLAT, 
+                              bg='gray', font=('Arial', 13, 'bold')
+                                , command=self.find_notes, width=68, height=59,
+                                overrelief=RIDGE, activebackground='#1E90FF')
+        self.find_note.place(x=376, y=0)
         self.all = Button(self, width=31, height=2, fg='white', 
                                 text="Note Storage", bg='#009cff',
                                 relief=FLAT, activeforeground='#009cff', 
