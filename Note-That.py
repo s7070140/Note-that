@@ -4,6 +4,50 @@ from ScrolledText import ScrolledText
 from sqlite3 import *
 import datetime
 
+
+def add_data(title, text, datetimes):
+    """
+    Add new data into database
+    """
+    new_data = [title, text, datetimes]
+    data = sqlite.connect('Database.db')
+    cur = data.cursor()
+    cur.execute('''CREATE TABLE IF NOT EXISTS NoteStorage
+    (Title text, Notedata text, DateTime text)''')
+    cur.execute("INSERT INTO NoteStorage VALUES (?, ?, ?)", new_data)
+    data.commit()
+    data.close()
+
+def tags(tag, title):
+    """
+    Add tag and title into database 
+    """
+    data = sqlite3.connect('Database.db')
+    cur = data.cursor()
+    cur.execute('''CREATE TABLE IF NOT EXISTS Tags
+    (Tags text, title text)''')
+    try:
+        cur.execute("ALTER TABLE Tags ADD COLUMN '%s' text" % tag) # add new tag column
+    except:
+        pass
+    cur.execute("INSERT OR REPLACE INTO Tags ('%s') VALUES ('%s' text)" % (tag, title))
+    data.commit()
+    data.close()
+
+def delete_data(tag_name, tag, title):
+    """
+    Delete data from tag and title
+    """
+    data = sqlite3.connect('Database.db')
+    cur = data.cursor()
+    tag_name = "DELETE FROM Tags WHERE '%s' = '%s'" % (tag_name, tag)
+    title_name = "DELETE FROM NoteStorage WHERE Title = '%s'" % title
+    cur.execute(tag_name)
+    cur.execute(title_name)
+    data.commit()
+    data.close()
+    
+
 class NoteStorage(Tk):
     
     def __init__(self, *args, **kwargs):
@@ -12,6 +56,7 @@ class NoteStorage(Tk):
     def all_note(self):
         self.title_file = Label(self, text='All note')
         self.title_file.grid(row=0, column=0)
+
 
 class Findpage(Tk):
     """
@@ -28,6 +73,7 @@ class Findpage(Tk):
         self.label.grid(row=0, column=0)
         self.b_find = Button(self, text='search', bg='green', relief=FLAT)
         self.b_find.grid(row=1, column=1)
+
 
 class Notepage(Tk):
 
@@ -47,6 +93,7 @@ class Notepage(Tk):
         self.text_main.grid(row=1, column=1)
         self.quit = Button(self, text="OK", command=note_page.quit)
         self.quit.grid(row=2, column=2)
+
         
 class MainApp(Tk):
     """
