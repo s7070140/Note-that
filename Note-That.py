@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from Tkinter import *
 from ScrolledText import ScrolledText
-from sqlite3 import *
+import sqlite3 as sqlite
 import datetime
 
 
@@ -25,12 +25,12 @@ def tags(tag, title=None):
     data = sqlite3.connect('Database.db')
     cur = data.cursor()
     cur.execute('''CREATE TABLE IF NOT EXISTS Tags
-    (Tags text, title text)''')
+    (Python text, Diary text, Programming text, Homework text, Idea text)''')
     try:
         cur.execute("ALTER TABLE Tags ADD COLUMN '%s' text" % tag) # add new tag column
     except:
         pass
-    cur.execute("INSERT OR REPLACE INTO Tags ('%s') VALUES ('%s' text)" % (tag, title))
+    cur.execute("INSERT OR REPLACE INTO Tags ('%s') VALUES ('%s')" % (tag, title))
     data.commit()
     data.close()
 
@@ -40,12 +40,30 @@ def delete_data(tag_name, tag, title):
     """
     data = sqlite3.connect('Database.db')
     cur = data.cursor()
-    tag_name = "DELETE FROM Tags WHERE '%s' = '%s'" % (tag_name, tag)
-    title_name = "DELETE FROM NoteStorage WHERE Title = '%s'" % title
+    tag_name = "DELETE FROM Tags WHERE %s = %s" % (tag_name, tag)
+    title_name = "DELETE FROM NoteStorage WHERE Title = %s" % title
     cur.execute(tag_name)
     cur.execute(title_name)
     data.commit()
     data.close()
+
+def date():
+    """
+    Return current time
+    """
+    day = datetime.date.today().strftime("%d")
+    month = datetime.date.today().strftime("%B")
+    year = datetime.date.today().strftime("%Y")
+    date_now = "%s %s %s" % (day, month, year)
+    return date_now
+
+##def prepare_data():
+##    """
+##    Return all data in database as dict
+##    """
+##    data = sql.connect("Database.db")
+##    cur = data.cursor()
+##    cur.execute("SELECT * FROM ")
     
 
 class NoteStorage(Tk):
@@ -69,7 +87,7 @@ class Findpage(Tk):
     def find_box(self):
         self.box = Entry(self, width=38, font=('AngsanaUPC', 18))
         self.box.grid(row=0, column=1)
-        self.label = Label(self, text='Find', font=('AngsanaUPC', 18))
+        self.label = Label(self, text='Search', font=('AngsanaUPC', 18))
         self.label.grid(row=0, column=0)
         self.b_find = Button(self, text='search', bg='green', relief=FLAT)
         self.b_find.grid(row=1, column=1)
@@ -107,6 +125,7 @@ class MainApp(Tk):
     def __init__(self, *args, **kwargs):
         Tk.__init__(self, *args, **kwargs)
         self.find_b = PhotoImage(file="Find_button.gif")
+        self.date = date()
         self.window()
 
     def note_storage(self):
@@ -120,7 +139,7 @@ class MainApp(Tk):
 
     def create_note(self):
 
-        title_name = self.title_box.get()
+        title_name = self.title_box.get().encode('utf-8')
         note_text = self.note_box.get('1.0', END).encode('utf-8')
         if title_name != '' and note_text != '':
             self.title_box.delete(0, END)
@@ -136,7 +155,7 @@ class MainApp(Tk):
     def find_notes(self):
 
         find = Findpage()
-        find.geometry('400x50+400+400')
+        find.geometry('400x80+400+400')
         #find.resizable(width=False, height=False)
         find.title('Find your note')
         find.mainloop()
@@ -151,6 +170,8 @@ class MainApp(Tk):
         title = Label(self.header, text="NoteThat", font=('MV Boli', 25, 'bold')
                            , bg='#1E90FF', fg='white')
         title.place(x=15, y=5)
+        self.datetime = Label(self, text=self.date)
+        self.datetime.place(x=325, y=75)
 
         #Input#
         self.title_name = Label(self, text="Title", font=('Arial', 12,))
@@ -166,14 +187,11 @@ class MainApp(Tk):
         self.note_box.place(x=20, y=185)
         
         #Button#
-        self.add_note = Button(self, width=12, height=1, text="Add Note", 
+        self.add_note = Button(self, width=40, height=1, text="Add Note", 
                                bg='green', relief=FLAT, font=('Arial', 13, 'bold')
                                , command=self.create_note, fg='white',
                                activeforeground='green')
         self.add_note.place(x=20, y=440)
-        self.add_tag = Button(self, width=12, height=1, text="Add Tags",
-                              bg='gray', relief=FLAT, font=('Arial', 13, 'bold'))
-        self.add_tag.place(x=162, y=440)
         self.find_note = Button(self.header, image=self.find_b, relief=FLAT, 
                               bg='gray', font=('Arial', 13, 'bold')
                                 , command=self.find_notes, width=68, height=59,
