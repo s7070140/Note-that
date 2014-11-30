@@ -4,49 +4,6 @@ from ScrolledText import ScrolledText
 import sqlite3 as sqlite
 import datetime
 
-
-def add_data(title, text, datetimes):
-    """
-    Add new data into database
-    """
-    new_data = [title, text, datetimes]
-    data = sqlite.connect('Database.db')
-    cur = data.cursor()
-    cur.execute('''CREATE TABLE IF NOT EXISTS NoteStorage
-    (Title text, Notedata text, DateTime text)''')
-    cur.execute("INSERT INTO NoteStorage VALUES (?, ?, ?)", new_data)
-    data.commit()
-    data.close()
-
-def tags(tag, title=None):
-    """
-    Add tag and title into database 
-    """
-    data = sqlite3.connect('Database.db')
-    cur = data.cursor()
-    cur.execute('''CREATE TABLE IF NOT EXISTS Tags
-    (Python text, Diary text, Programming text, Homework text, Idea text)''')
-    try:
-        cur.execute("ALTER TABLE Tags ADD COLUMN '%s' text" % tag) # add new tag column
-    except:
-        pass
-    cur.execute("INSERT OR REPLACE INTO Tags ('%s') VALUES ('%s')" % (tag, title))
-    data.commit()
-    data.close()
-
-def delete_data(tag_name, tag, title):
-    """
-    Delete data from tag and title
-    """
-    data = sqlite3.connect('Database.db')
-    cur = data.cursor()
-    tag_name = "DELETE FROM Tags WHERE %s = %s" % (tag_name, tag)
-    title_name = "DELETE FROM NoteStorage WHERE Title = %s" % title
-    cur.execute(tag_name)
-    cur.execute(title_name)
-    data.commit()
-    data.close()
-
 def date():
     """
     Return current time
@@ -56,6 +13,46 @@ def date():
     year = datetime.date.today().strftime("%Y")
     date_now = "%s %s %s" % (day, month, year)
     return date_now
+
+def add_data(title, text, datetime, important=None):
+    """
+    Add new data to database
+    """
+    new_data = [title, text, datetime, important]
+    data = sqlite.connect('Database.db')
+    cur = data.cursor()
+    cur.execute('''CREATE TABLE IF NOT EXISTS NoteStorage
+                (Title text, Notedata text, DateTime text, Important text)''')
+    cur.execute("INSERT INTO NoteStorage VALUES (?, ?, ?, ?)", new_data)
+    data.commit()
+    data.close()
+
+def delete_data(title):
+    """
+    Delete select data in database
+    """
+    data = sqlite.connect("Database.db")
+    cur = data.cursor()
+    cur.execute("DELETE FROM NoteStorage WHERE Title = '%s'" % title)
+    data.commit()
+    data.close()
+
+def get_data():
+    """
+    Return all data in database as a dict
+    """
+    all_data = {}
+    data = sqlite.connect('Database.db')
+    cur = data.cursor()
+    cur.execute("SELECT * FROM NoteStorage ORDER BY Title")
+    for i in cur:
+        if i[0] not in all_data:
+            all_data[i[0]] = []
+        all_data[i[0]].append(i[1])
+        all_data[i[0]].append(i[2])
+        all_data[i[0]].append(i[3])
+    return all_data
+
 
 ##def prepare_data():
 ##    """
