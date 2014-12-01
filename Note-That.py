@@ -14,7 +14,7 @@ def date():
     date_now = "%s %s %s" % (day, month, year)
     return date_now
 
-def add_data(title, text, datetime, important=None):
+def add_data(title, text, datetime, important):
     """
     Add new data to database
     """
@@ -53,14 +53,6 @@ def get_data():
         all_data[i[0]].append(i[3])
     return all_data
 
-
-##def prepare_data():
-##    """
-##    Return all data in database as dict
-##    """
-##    data = sql.connect("Database.db")
-##    cur = data.cursor()
-##    cur.execute("SELECT * FROM ")
     
 
 class NoteStorage(Tk):
@@ -90,28 +82,59 @@ class Findpage(Tk):
         self.b_find.grid(row=1, column=1)
 
 
-class Notepage(Tk):
+class Notepage(Toplevel):
 
-    def __init__(self, text_title, text_note, *args, **kwargs):
-        Tk.__init__(self, text_title, text_note, *args, **kwargs)
-        self.text_note = text_note
-        self.text_title = text_title
+    def __init__(self, *args, **kwargs):
+        Toplevel.__init__(self, *args, **kwargs)
+        self.bg_page = PhotoImage(file="bg_note.gif")
+        self.favorite_logo = PhotoImage(file="favorite.gif")
 
-    def note_pages(self, note_page):
+    def note_pages(self, text_title, text_note, favorite):
         """
         Display a Note when add new note or edit note
         """
-        self.decorate = Frame(self, bg='blue', width=350, height=50)
+        
+        def add_destroy():
+            """
+            add new data and destroy current window
+            """
+            add_data(text_title, text_note, date(), favorite)
+            self.destroy()
+        
+        #Background
+        self.background = Label(self, image=self.bg_page)
+        self.background.place(x=0, y=0)
+        
+        #header and title
+        self.decorate = Frame(self, bg='#FF8400', width=350, height=50)
         self.decorate.place(x=0, y=0)
-        self.new_note = Label(self.decorate, text=self.text_title,
-                              bg='blue', fg='white')
-        self.new_note.place(x=10, y=15)
-        self.text_main = Label(self, text=self.text_note, justify=LEFT,
-                               font=('AngsanaUPC', 18), padx=10, pady=10,
-                               bg='gray')
-        self.text_main.place(x=30, y=100)
-        self.quit = Button(self, text="OK", command=note_page.quit)
-        self.quit.place(x=250, y=400)
+        self.new_note = Label(self.decorate, text=text_title,
+                              bg='#FF8400', fg='white',
+                              font=('AngsanaUPC', 24, 'bold'))
+        self.new_note.place(x=15, y=0)
+
+        #note
+        self.paper = Frame(self, width=300, height=350, bg='#FFECA5')
+        self.paper.place(x=25, y=80)
+        self.word = Label(self.paper, text=text_note, justify=LEFT,
+                          font=('AngsanaUPC', 14), padx=10, pady=10,
+                          bg='#FFECA5', wraplength=280)
+        self.word.place(x=0, y=0)
+
+        #Button
+        self.ok = Button(self, text='Ok', bg='#02d602', relief=FLAT,
+                         width=10, fg='white', font=('Arial', 10, 'bold'),
+                         command=add_destroy, activebackground='white',
+                         activeforeground='#02d602')
+        self.ok.place(x=140, y=445)
+        self.cancel = Button(self, text='Cancel', bg='#a0a0a0', relief=FLAT,
+                             width=10, fg='white', font=('Arial', 10, 'bold'),
+                             activebackground='white', activeforeground=
+                             '#a0a0a0', command=self.destroy)
+        self.cancel.place(x=235, y=445)
+        if favorite == 1:
+            self.favor = Label(self, image=self.favorite_logo, bg='#FF8400')
+            self.favor.place(x=286, y=-1)
 
         
 class MainApp(Tk):
@@ -123,6 +146,7 @@ class MainApp(Tk):
         Tk.__init__(self, *args, **kwargs)
         self.find_b = PhotoImage(file="Find_button.gif")
         self.date = date()
+        self.var = IntVar()
         self.window()
 
     def note_storage(self):
@@ -138,16 +162,15 @@ class MainApp(Tk):
 
         title_name = self.title_box.get().encode('utf-8')
         note_text = self.note_box.get('1.0', END).encode('utf-8')
-        if title_name != '' and note_text != '':
+        favorite = self.var.get()
+        if title_name != '' and note_text != '' and title_name not in get_data():
             self.title_box.delete(0, END)
             self.note_box.delete('1.0', END)
-            note_page = Notepage(title_name, note_text)
-            note_page.geometry('350x450+500+150')
+            note_page = Notepage()
+            note_page.geometry('350x500+500+150')
             note_page.title('New note' + ' ' + ':' + ' ' + title_name)
             note_page.resizable(width=False, height=False)
-            note_page.note_pages(note_page)
-            note_page.mainloop()
-            note_page.destroy()
+            note_page.note_pages(title_name, note_text, favorite)
 
     def find_notes(self):
 
@@ -182,13 +205,19 @@ class MainApp(Tk):
         self.note_box = ScrolledText(self, font=('AngsanaUPC', 14), width=65,
                                      relief=FLAT, bg='white', height=9)
         self.note_box.place(x=20, y=185)
+
+        #Check list
+        self.check = Checkbutton(self, text='Favorite', bg='#FEFF92',
+                      variable=self.var, activebackground='#FEFF92',
+                      width=55, justify='left')
+        self.check.place(x=20, y=423)
         
         #Button#
-        self.add_note = Button(self, width=40, height=1, text="Add Note", 
-                               bg='green', relief=FLAT, font=('Arial', 13, 'bold')
+        self.add_note = Button(self, width=45, text="Add Note", 
+                               bg='green', relief=FLAT, font=('Arial', 11, 'bold')
                                , command=self.create_note, fg='white',
                                activeforeground='green')
-        self.add_note.place(x=20, y=440)
+        self.add_note.place(x=20, y=457)
         self.find_note = Button(self.header, image=self.find_b, relief=FLAT, 
                               bg='gray', font=('Arial', 13, 'bold')
                                 , command=self.find_notes, width=68, height=59,
@@ -199,7 +228,7 @@ class MainApp(Tk):
                                 relief=FLAT, activeforeground='#009cff', 
                                 font=('Arial', 16, 'bold'),
                           command=self.note_storage)
-        self.all.place(x=20, y=490)
+        self.all.place(x=20, y=500)
 
         #Footer#
         self.last = Frame(self, bg='#1E90FF', width=450, height=25)
