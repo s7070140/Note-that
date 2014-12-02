@@ -20,6 +20,7 @@ def add_data(title, text, datetime, important):
     """
     new_data = [title, text, datetime, important]
     data = sqlite.connect('Database.db')
+    data.text_factory = str
     cur = data.cursor()
     cur.execute('''CREATE TABLE IF NOT EXISTS NoteStorage
                 (Title text, Notedata text, DateTime text, Important text)''')
@@ -59,7 +60,7 @@ class NoteStorage(Toplevel):
     
     def __init__(self, *args, **kwargs):
         Toplevel.__init__(self, * args, **kwargs)
-        self.paper = PhotoImage(file='paper.gif')
+        self.papers = PhotoImage(file='paper.gif')
         self.star = PhotoImage(file='star.gif')
         self.height = 120 * len(get_data())
 
@@ -78,6 +79,7 @@ class NoteStorage(Toplevel):
                                   tags="self.frame")
         self.frame.bind("<Configure>", self.setting)
         self.bind("<MouseWheel>", self.wheel)
+        self.list_note()
 
     def wheel(self, event):
         self.canvas.yview_scroll(-1*(event.delta/100), "units")
@@ -85,7 +87,39 @@ class NoteStorage(Toplevel):
     def setting(self, event):
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
-    
+    def open_page(self, title):
+        print title
+
+    def list_note(self):
+        count = 0
+        num = 1
+        data = get_data()
+        for i in data:
+            text = data[i][0].splitlines()[0]
+            if len(text) > 40:
+                text = text[:40] + '...'
+            self.button = Button(self.frame, text=num, fg='white', bg='#ff8400',
+                                 relief=FLAT, width=3,
+                                 font=('Arial', 16, 'bold'),
+                                 command=lambda i=i: self.open_page(i))
+            self.paper = Label(self.frame, image=self.papers)
+            self.title = Label(self.frame, text=i, bg='#fff6aa',
+                               font=('AngsanaUPC', 15, 'bold'))
+            self.text = Label(self.frame, text=text, bg='#fff6aa',
+                              font=('AngsanaUPC', 12), justify=LEFT)
+            self.date = Label(self.frame, text=data[i][1], bg='#fff6aa',
+                              font=('AngsanaUPC', 12))
+            if data[i][2] == '1':
+                self.star_logo = Label(self.frame, image=self.star, bg='#fff6aa')
+                self.star_logo.place(x=370, y=80+count)
+
+            self.button.place(x=20, y=22+count)
+            self.paper.place(x=75, y=20+count)
+            self.title.place(x=90, y=22+count)
+            self.text.place(x=95, y=60+count)
+            self.date.place(x=315, y=20+count)
+            count += 120
+            num += 1
 
 
 class Findpage(Tk):
