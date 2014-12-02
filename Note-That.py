@@ -62,10 +62,12 @@ class NoteStorage(Toplevel):
         Toplevel.__init__(self, * args, **kwargs)
         self.papers = PhotoImage(file='paper.gif')
         self.star = PhotoImage(file='star.gif')
+        self.storage = PhotoImage(file='logo_Storage.gif')
         self.height = 120 * len(get_data())
 
     def all_note(self):
-        self.header = Frame(self, height=60, width=450, bg='#0A9AFA')
+        self.header = Frame(self, height=60, width=450, bg='#009ffb')
+        self.logo = Label(self.header, image=self.storage, bg='#009ffb')
         self.canvas = Canvas(self, width=450)
         self.frame = Frame(self.canvas, height=self.height, width=450)
         self.scr = Scrollbar(self.canvas, orient='vertical',
@@ -73,6 +75,7 @@ class NoteStorage(Toplevel):
         self.canvas.configure(yscrollcommand=self.scr.set)
 
         self.header.pack()
+        self.logo.place(x=10, y=7)
         self.canvas.pack(fill=BOTH, expand=True)
         self.scr.pack(side=RIGHT, fill=Y)
         self.canvas.create_window((0, 0), window=self.frame, anchor=NW,
@@ -204,6 +207,7 @@ class MainApp(Tk):
         self.find_b = PhotoImage(file="Find_button.gif")
         self.date = date()
         self.var = IntVar()
+        self.logo = PhotoImage(file='logo_app.gif')
         self.window()
 
     def note_storage(self):
@@ -232,7 +236,7 @@ class MainApp(Tk):
 
         find = Findpage()
         find.geometry('400x80+400+400')
-        #find.resizable(width=False, height=False)
+        find.resizable(width=False, height=False)
         find.title('Find your note')
         find.mainloop()
 
@@ -243,9 +247,8 @@ class MainApp(Tk):
         #Header#
         self.header = Frame(self, width=450, height=65, bg='#1E90FF')
         self.header.place(x=0, y=0)
-        title = Label(self.header, text="NoteThat", font=('MV Boli', 25, 'bold')
-                           , bg='#1E90FF', fg='white')
-        title.place(x=15, y=5)
+        self.logo_name = Label(self.header, image=self.logo, bg='#1E90FF')
+        self.logo_name.place(x=15, y=5)
         self.datetime = Label(self, text=self.date)
         self.datetime.place(x=325, y=75)
 
