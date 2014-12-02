@@ -66,6 +66,9 @@ class NoteStorage(Toplevel):
         self.height = 120 * len(get_data())
 
     def all_note(self):
+        """
+        Display Main note storage page
+        """
         self.header = Frame(self, height=60, width=450, bg='#009ffb')
         self.logo = Label(self.header, image=self.storage, bg='#009ffb')
         self.canvas = Canvas(self, width=450)
@@ -85,15 +88,24 @@ class NoteStorage(Toplevel):
         self.list_note()
 
     def wheel(self, event):
+        """
+        scroll wheel
+        """
         self.canvas.yview_scroll(-1*(event.delta/100), "units")
 
     def setting(self, event):
+        """
+        Config scrollbar react with canvas
+        """
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
     def open_page(self, title):
         print title
 
     def list_note(self):
+        """
+        Display list of all note
+        """
         count = 0
         num = 1
         data = get_data()
@@ -211,7 +223,9 @@ class MainApp(Tk):
         self.window()
 
     def note_storage(self):
-
+        """
+        Create Note Storage page
+        """
         note_store = NoteStorage()
         note_store.geometry('450x600+450+90')
         note_store.title('Note Storage')
@@ -219,7 +233,9 @@ class MainApp(Tk):
         note_store.all_note()
 
     def create_note(self):
-
+        """
+        Create new note page
+        """
         title_name = self.title_box.get().encode('utf-8')
         note_text = self.note_box.get('1.0', END).encode('utf-8')
         favorite = self.var.get()
@@ -233,7 +249,9 @@ class MainApp(Tk):
             note_page.note_pages(title_name, note_text, favorite)
 
     def find_notes(self):
-
+        """
+        Create find note page
+        """
         find = Findpage()
         find.geometry('400x80+400+400')
         find.resizable(width=False, height=False)
