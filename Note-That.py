@@ -55,14 +55,37 @@ def get_data():
 
     
 
-class NoteStorage(Tk):
+class NoteStorage(Toplevel):
     
     def __init__(self, *args, **kwargs):
-        Tk.__init__(self, * args, **kwargs)
+        Toplevel.__init__(self, * args, **kwargs)
+        self.paper = PhotoImage(file='paper.gif')
+        self.star = PhotoImage(file='star.gif')
+        self.height = 120 * len(get_data())
 
     def all_note(self):
-        self.title_file = Label(self, text='All note')
-        self.title_file.grid(row=0, column=0)
+        self.header = Frame(self, height=60, width=450, bg='#0A9AFA')
+        self.canvas = Canvas(self, width=450)
+        self.frame = Frame(self.canvas, height=self.height, width=450)
+        self.scr = Scrollbar(self.canvas, orient='vertical',
+                             command=self.canvas.yview)
+        self.canvas.configure(yscrollcommand=self.scr.set)
+
+        self.header.pack()
+        self.canvas.pack(fill=BOTH, expand=True)
+        self.scr.pack(side=RIGHT, fill=Y)
+        self.canvas.create_window((0, 0), window=self.frame, anchor=NW,
+                                  tags="self.frame")
+        self.frame.bind("<Configure>", self.setting)
+        self.bind("<MouseWheel>", self.wheel)
+
+    def wheel(self, event):
+        self.canvas.yview_scroll(-1*(event.delta/100), "units")
+
+    def setting(self, event):
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+
+    
 
 
 class Findpage(Tk):
@@ -156,7 +179,6 @@ class MainApp(Tk):
         note_store.title('Note Storage')
         note_store.resizable(width=False, height=False)
         note_store.all_note()
-        note_store.mainloop()
 
     def create_note(self):
 
