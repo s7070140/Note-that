@@ -60,6 +60,7 @@ class Note(Toplevel):
     def __init__(self, *args, **kwargs):
         Toplevel.__init__(self, *args, **kwargs)
         self.background = PhotoImage(file='note_bg1.gif')
+        self.image = PhotoImage(file='favorite.gif')
 
     def my_note(self, title):
         """
@@ -69,6 +70,34 @@ class Note(Toplevel):
 
         self.bg = Label(self, image=self.background)
         self.bg.place(x=0, y=0)
+
+        self.header = Frame(self, bg='#FF8400', width=350, height=50)
+        self.header.place(x=0, y=0)
+        self.title = Label(self.header, text=title, bg='#FF8400', fg='white',
+                           font=('AngsanaUPC', 24, 'bold'))
+        self.title.place(x=10, y=-1)
+
+        self.paper = Frame(self, width=300, height=350, bg='#FFECA5')
+        self.paper.place(x=25, y=80)
+        self.word = Label(self.paper, text=data[0], justify=LEFT,
+                          font=('AngsanaUPC', 14), padx=10, pady=10,
+                          bg='#FFECA5', wraplength=280)
+        self.word.place(x=0, y=0)
+
+        self.ok = Button(self, text='Ok', bg='gray', relief=FLAT,
+                         width=10, fg='white', font=('Arial', 10, 'bold'),
+                         command=self.destroy, activebackground='white',
+                         activeforeground='gray')
+        self.ok.place(x=140, y=445)
+        self.delete = Button(self, text='Delete', bg='red', relief=FLAT,
+                             width=10, fg='white', font=('Arial', 10, 'bold'),
+                             activebackground='white', activeforeground=
+                             'red')
+        self.delete.place(x=235, y=445)
+        if data[2] == '1':
+            self.favor = Label(self, image=self.image, bg='#FF8400')
+            self.favor.place(x=286, y=-1)
+        
    
 
 class NoteStorage(Toplevel):
@@ -117,7 +146,7 @@ class NoteStorage(Toplevel):
     def open_page(self, title):
         page = Note()
         page.geometry('350x500+500+150')
-        page.title(title)
+        page.title('Title' + ' ' + '-' + ' ' + title)
         page.my_note(title)
         page.resizable(width=False, height=False)
 
