@@ -8,7 +8,7 @@ def date():
     """
     Return current time
     """
-    day = datetime.date.today().strftime("%d")
+    day = int(datetime.date.today().strftime("%d"))
     month = datetime.date.today().strftime("%B")
     year = datetime.date.today().strftime("%Y")
     date_now = "%s %s %s" % (day, month, year)
@@ -54,12 +54,27 @@ def get_data():
         all_data[i[0]].append(i[3])
     return all_data
 
-    
+
+class Note(Toplevel):
+
+    def __init__(self, *args, **kwargs):
+        Toplevel.__init__(self, *args, **kwargs)
+        self.background = PhotoImage(file='note_bg1.gif')
+
+    def my_note(self, title):
+        """
+        Create UI for note
+        """
+        data = get_data()[title]
+
+        self.bg = Label(self, image=self.background)
+        self.bg.place(x=0, y=0)
+   
 
 class NoteStorage(Toplevel):
     
     def __init__(self, *args, **kwargs):
-        Toplevel.__init__(self, * args, **kwargs)
+        Toplevel.__init__(self, *args, **kwargs)
         self.papers = PhotoImage(file='paper.gif')
         self.star = PhotoImage(file='star.gif')
         self.storage = PhotoImage(file='logo_Storage.gif')
@@ -100,7 +115,11 @@ class NoteStorage(Toplevel):
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
     def open_page(self, title):
-        print title
+        page = Note()
+        page.geometry('350x500+500+150')
+        page.title(title)
+        page.my_note(title)
+        page.resizable(width=False, height=False)
 
     def list_note(self):
         """
