@@ -3,6 +3,7 @@ from Tkinter import *
 from ScrolledText import ScrolledText
 import sqlite3 as sqlite
 import datetime
+import tkMessageBox
 
 def date():
     """
@@ -62,6 +63,12 @@ class Note(Toplevel):
         self.background = PhotoImage(file='note_bg1.gif')
         self.image = PhotoImage(file='favorite.gif')
 
+    def delete_select(self, title):
+            ask = tkMessageBox.askquestion("Delete", "Are you sure?", icon="warning")
+            if ask == 'yes':
+                delete_data(title)
+                self.destroy()
+
     def my_note(self, title):
         """
         Create UI for note
@@ -84,15 +91,16 @@ class Note(Toplevel):
                           bg='#FFECA5', wraplength=280)
         self.word.place(x=0, y=0)
 
-        self.ok = Button(self, text='Ok', bg='gray', relief=FLAT,
+        self.ok = Button(self, text='Ok', bg='#02d602', relief=FLAT,
                          width=10, fg='white', font=('Arial', 10, 'bold'),
                          command=self.destroy, activebackground='white',
-                         activeforeground='gray')
+                         activeforeground='#02d602')
         self.ok.place(x=140, y=445)
         self.delete = Button(self, text='Delete', bg='red', relief=FLAT,
                              width=10, fg='white', font=('Arial', 10, 'bold'),
                              activebackground='white', activeforeground=
-                             'red')
+                             'red', command=lambda
+                             title=title: self.delete_select(title))
         self.delete.place(x=235, y=445)
         if data[2] == '1':
             self.favor = Label(self, image=self.image, bg='#FF8400')
