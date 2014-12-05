@@ -210,21 +210,16 @@ class NoteStorage(Toplevel):
             num += 1
 
 
-class Findpage(Tk):
+class Findpage(Toplevel):
     """
     Represent a Find page
     """
     def __init__(self, *args, **kwargs):
-        Tk.__init__(self, *args, **kwargs)
-        self.find_box()
+        Toplevel.__init__(self, *args, **kwargs)
+        pass
 
     def find_box(self):
-        self.box = Entry(self, width=38, font=('AngsanaUPC', 18))
-        self.box.grid(row=0, column=1)
-        self.label = Label(self, text='Search', font=('AngsanaUPC', 18))
-        self.label.grid(row=0, column=0)
-        self.b_find = Button(self, text='search', bg='green', relief=FLAT)
-        self.b_find.grid(row=1, column=1)
+        pass
 
 
 class Notepage(Toplevel):
