@@ -55,6 +55,23 @@ def get_data():
         all_data[i[0]].append(i[3])
     return all_data
 
+def get_favorite():
+    '''
+    Return all favorite note
+    '''
+    favor_data = {}
+    data = sqlite.connect('Database.db')
+    cur = data.cursor()
+    all_data = cur.execute('SELECT * FROM NoteStorage ORDER BY Title')
+    for i in all_date:
+        if i[3] == '1':
+            if i[0] not in favor_data:
+                favor_data[i[0]] = []
+            favor_data[i[0]].append(i[1])
+            favor_data[i[0]].append(i[2])
+            favor_data[i[0]].append(i[3])
+    return favor_data
+            
 
 class Note(Toplevel):
 
