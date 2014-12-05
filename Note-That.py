@@ -216,10 +216,24 @@ class Findpage(Toplevel):
     """
     def __init__(self, *args, **kwargs):
         Toplevel.__init__(self, *args, **kwargs)
-        pass
+        self.find_box()
 
     def find_box(self):
-        pass
+        self.header = Frame(self, width=450, height=100, bg='gray')
+        self.label = Label(self.header, text='Search', fg='white', bg='gray',\
+                           font=('AngsanaUPC', 18, 'bold'))
+        self.box = Entry(self.header, bg='white', font=('AngsanaUPC', 12),\
+                         width=70)
+        self.button1 = Button(self.header, text='Search', bg='white', width=10,\
+                              relief=FLAT)
+        self.button2 = Button(self.header, text='Cancel', bg='white', width=10,\
+                              relief=FLAT, command=self.destroy)
+
+        self.header.pack()
+        self.label.place(x=175, y=0)
+        self.box.place(x=20, y=35)
+        self.button1.place(x=120, y=67)
+        self.button2.place(x=120, y=67)
 
 
 class Notepage(Toplevel):
