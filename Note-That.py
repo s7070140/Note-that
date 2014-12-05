@@ -335,10 +335,9 @@ class MainApp(Tk):
         Create find note page
         """
         find = Findpage()
-        find.geometry('400x80+400+400')
+        find.geometry('400x500+475+145')
         find.resizable(width=False, height=False)
         find.title('Find your note')
-        find.mainloop()
 
     def window(self):
         """
