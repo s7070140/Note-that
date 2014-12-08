@@ -122,8 +122,8 @@ class Note(Toplevel):
         if data[2] == '1':
             self.favor = Label(self, image=self.image, bg='#FF8400')
             self.favor.place(x=286, y=-1)
-        
-   
+
+
 
 class NoteStorage(Toplevel):
     
@@ -256,6 +256,17 @@ class Findpage(Toplevel):
 
         self.list.place(x=0, y=0)
         self.list.bind("<Double-Button-1>", self.open_page)
+
+    def open_page(self, event):
+        widget = event.widget
+        select = widget.curselection()
+        value = widget.get(select[0])
+
+        page = Note()
+        page.geometry('350x500+500+150')
+        page.title('Title' + ' ' + '-' + ' ' + value)
+        page.my_note(value)
+        page.resizable(width=False, height=False)
 
 
 class Notepage(Toplevel):
