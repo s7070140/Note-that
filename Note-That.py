@@ -225,15 +225,19 @@ class Findpage(Toplevel):
         self.box = Entry(self.header, bg='white', font=('AngsanaUPC', 12),\
                          width=70)
         self.button1 = Button(self.header, text='Search', bg='white', width=10,\
-                              relief=FLAT)
+                              relief=FLAT, command=self.list_note)
         self.button2 = Button(self.header, text='Cancel', bg='white', width=10,\
                               relief=FLAT, command=self.destroy)
+        self.body = Frame(self, bg='white')
+        self.list = Listbox(self.body, bg='white')
+        self.body = Frame(self, bg='white')
 
         self.header.pack()
         self.label.place(x=175, y=0)
         self.box.place(x=20, y=35)
         self.button1.place(x=120, y=67)
-        self.button2.place(x=120, y=67)
+        self.button2.place(x=210, y=67)
+        self.body.pack(fill=BOTH, expand=True)
 
 
 class Notepage(Toplevel):
