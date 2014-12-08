@@ -255,6 +255,7 @@ class Findpage(Toplevel):
                     self.list.insert(END, i)
 
         self.list.place(x=0, y=0)
+        self.list.bind("<Double-Button-1>", self.open_page)
 
 
 class Notepage(Toplevel):
