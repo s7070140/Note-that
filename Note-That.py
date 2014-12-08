@@ -290,6 +290,22 @@ class Notepage(Toplevel):
             self.favor = Label(self, image=self.favorite_logo, bg='#FF8400')
             self.favor.place(x=286, y=-1)
 
+class About(Toplevel):
+
+    def __init__(self, *args, **kwargs):
+        Toplevel.__init__(self, *args, **kwargs)
+        self.credit()
+
+    def credit(self):
+        self.frame = Frame(self, bg='#B7B7B7', width=250, height=100)
+        self.frame.place(x=0, y=0)
+        self.name = Label(self, text='Note That', fg='white', bg='#B7B7B7',
+                          font=('Arial', 30, 'bold'))
+        self.name.place(x=35, y=10)
+        self.label = Label(self, text='PSIT Project 2014'
+                           , fg='white', bg='#B7B7B7', font=('Arial', 10, 'bold'))
+        self.label.place(x=65, y=65)
+        
         
 class MainApp(Tk):
     """
@@ -338,6 +354,15 @@ class MainApp(Tk):
         find.geometry('400x500+475+145')
         find.resizable(width=False, height=False)
         find.title('Find your note')
+
+    def credit(self):
+        """
+        Open about page
+        """
+        about = About()
+        about.geometry('250x350+550+190')
+        about.resizable(width=False, height=False)
+        about.title('About')
 
     def window(self):
         """
@@ -394,6 +419,11 @@ class MainApp(Tk):
         self.fac = Label(self.last, fg='white', bg='#1E90FF', 
                          text="Faculty of Information Technology, KMITL")
         self.fac.place(x=110, y=3)
+        self.about = Button(self.last, bg='#1E90FF', text='?', fg='white',
+                            activeforeground='white', activebackground='#1E90FF'
+                            , command=self.credit, relief=FLAT, width=2,
+                            overrelief=RIDGE)
+        self.about.place(x=426, y=0)
 
         
 if __name__ == "__main__":
