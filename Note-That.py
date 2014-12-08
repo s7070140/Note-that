@@ -239,6 +239,13 @@ class Findpage(Toplevel):
         self.button2.place(x=210, y=67)
         self.body.pack(fill=BOTH, expand=True)
 
+    def list_note(self):
+        text = self.box.get().encode('utf-8')
+        self.box.delete(0, END)
+        self.list = Listbox(self.body, bg='white', width=450, height=400)
+
+        self.list.place(x=0, y=0)
+
 
 class Notepage(Toplevel):
 
