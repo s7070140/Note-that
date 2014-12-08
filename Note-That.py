@@ -252,6 +252,7 @@ class Notepage(Toplevel):
             """
             add new data and destroy current window
             """
+            message = tkMessageBox.showinfo('Status', 'Complete')
             add_data(text_title, text_note, date(), favorite)
             self.destroy()
         
@@ -345,6 +346,8 @@ class MainApp(Tk):
             note_page.title('New note' + ' ' + ':' + ' ' + title_name)
             note_page.resizable(width=False, height=False)
             note_page.note_pages(title_name, note_text, favorite)
+        elif title_name in get_data():
+            error = tkMessageBox.showerror('Error', 'Duplicate title name!')
 
     def find_notes(self):
         """
