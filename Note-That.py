@@ -242,7 +242,17 @@ class Findpage(Toplevel):
     def list_note(self):
         text = self.box.get().encode('utf-8')
         self.box.delete(0, END)
-        self.list = Listbox(self.body, bg='white', width=450, height=400)
+        self.list = Listbox(self.body, bg='white', width=450, height=400,\
+                            relief=FLAT, font=('AngsanaUPC', 16),\
+                            activestyle='none')
+
+        if text == '':
+            for i in get_data():
+                self.list.insert(END, i)
+        else:
+            for i in get_data():
+                if text in i:
+                    self.list.insert(END, i)
 
         self.list.place(x=0, y=0)
 
