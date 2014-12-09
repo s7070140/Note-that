@@ -242,12 +242,16 @@ class Findpage(Toplevel):
         self.favor.place(x=55, y=67)
         self.body.pack(fill=BOTH, expand=True)
 
-    def list_note(self):
+    def list_note(self, num=0):
         text = self.box.get().encode('utf-8')
         self.box.delete(0, END)
         self.list = Listbox(self.body, bg='white', width=450, height=400,\
                             relief=FLAT, font=('AngsanaUPC', 16),\
                             activestyle='none')
+        if num == 0:
+            data = get_data()
+        else:
+            data = get_favorite()
 
         if text == '':
             for i in get_data():
