@@ -245,23 +245,30 @@ class Findpage(Toplevel):
     def list_note(self, num=0):
         text = self.box.get().encode('utf-8')
         self.box.delete(0, END)
-        self.list = Listbox(self.body, bg='white', width=450, height=400,\
-                            relief=FLAT, font=('AngsanaUPC', 16),\
+        self.list.destroy()
+        self.list = Listbox(self.body, bg='white', relief=FLAT,\
+                            font=('AngsanaUPC', 16),\
                             activestyle='none')
+        
+        self.scr = Scrollbar(self.list, orient=VERTICAL)
+        self.list.config(yscrollcommand=self.scr.set)
+        self.scr.config(command=self.list.yview)
+        self.scr.pack(side=RIGHT, fill=Y)
+        
         if num == 0:
             data = get_data()
         else:
             data = get_favorite()
 
         if text == '':
-            for i in get_data():
+            for i in data:
                 self.list.insert(END, i)
         else:
-            for i in get_data():
+            for i in data:
                 if text in i:
                     self.list.insert(END, i)
 
-        self.list.place(x=0, y=0)
+        self.list.pack(fill=BOTH, expand=True)
         self.list.bind("<Double-Button-1>", self.open_page)
 
     def open_page(self, event):
