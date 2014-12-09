@@ -1,9 +1,13 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from Tkinter import *
 from ScrolledText import ScrolledText
 import sqlite3 as sqlite
 import datetime
 import tkMessageBox
+import sys
+reload(sys)
+sys.setdefaultencoding("utf-8")
 
 def date():
     """
@@ -63,7 +67,7 @@ def get_favorite():
     data = sqlite.connect('Database.db')
     cur = data.cursor()
     all_data = cur.execute('SELECT * FROM NoteStorage ORDER BY Title')
-    for i in all_date:
+    for i in all_data:
         if i[3] == '1':
             if i[0] not in favor_data:
                 favor_data[i[0]] = []
@@ -77,14 +81,15 @@ class Note(Toplevel):
 
     def __init__(self, *args, **kwargs):
         Toplevel.__init__(self, *args, **kwargs)
-        self.background = PhotoImage(file='note_bg1.gif')
-        self.image = PhotoImage(file='favorite.gif')
+        self.background = PhotoImage(file='Image/note_bg1.gif')
+        self.image = PhotoImage(file='Image/favorite.gif')
 
     def delete_select(self, title):
-            ask = tkMessageBox.askquestion("Delete", "Are you sure?", icon="warning")
-            if ask == 'yes':
-                delete_data(title)
-                self.destroy()
+        """Delete data and destroy current window"""
+        ask = tkMessageBox.askquestion("Delete", "Are you sure?", icon="warning")
+        if ask == 'yes':
+            delete_data(title)
+            self.destroy()
 
     def my_note(self, title):
         """
@@ -129,9 +134,9 @@ class NoteStorage(Toplevel):
     
     def __init__(self, *args, **kwargs):
         Toplevel.__init__(self, *args, **kwargs)
-        self.papers = PhotoImage(file='paper.gif')
-        self.star = PhotoImage(file='star.gif')
-        self.storage = PhotoImage(file='logo_Storage.gif')
+        self.papers = PhotoImage(file='Image/paper.gif')
+        self.star = PhotoImage(file='Image/star.gif')
+        self.storage = PhotoImage(file='Image/logo_Storage.gif')
         self.height = 120 * len(get_data())
 
     def all_note(self):
@@ -147,7 +152,7 @@ class NoteStorage(Toplevel):
         self.canvas.configure(yscrollcommand=self.scr.set)
 
         self.header.pack()
-        self.logo.place(x=10, y=7)
+        self.logo.place(x=125, y=7)
         self.canvas.pack(fill=BOTH, expand=True)
         self.scr.pack(side=RIGHT, fill=Y)
         self.canvas.create_window((0, 0), window=self.frame, anchor=NW,
@@ -169,6 +174,9 @@ class NoteStorage(Toplevel):
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
     def open_page(self, title):
+        """
+        Open select note
+        """
         page = Note()
         page.geometry('350x500+500+150')
         page.title('Title' + ' ' + '-' + ' ' + title)
@@ -179,18 +187,22 @@ class NoteStorage(Toplevel):
         """
         Display list of all note
         """
-        count = 0
+        count = 5
         num = 1
         data = get_data()
         for i in data:
             text = data[i][0].splitlines()[0]
-            if len(text) > 40:
-                text = text[:40] + '...'
+            if len(text) > 50:
+                text = text[:50] + '...'
+            if num % 2 == 0: color = 'gray'
+            else: color = 'white'
+            self.back = LabelFrame(self.frame, bg=color, width=410, height=115)
+            self.back.place(x=13, y=count)
             self.button = Button(self.frame, text=num, fg='white', bg='#ff8400',
                                  relief=FLAT, width=3,
                                  font=('Arial', 16, 'bold'),
                                  command=lambda i=i: self.open_page(i))
-            self.paper = Label(self.frame, image=self.papers)
+            self.paper = Label(self.frame, image=self.papers, bg=color)
             self.title = Label(self.frame, text=i, bg='#fff6aa',
                                font=('AngsanaUPC', 15, 'bold'))
             self.text = Label(self.frame, text=text, bg='#fff6aa',
@@ -199,13 +211,13 @@ class NoteStorage(Toplevel):
                               font=('AngsanaUPC', 12))
             if data[i][2] == '1':
                 self.star_logo = Label(self.frame, image=self.star, bg='#fff6aa')
-                self.star_logo.place(x=370, y=80+count)
+                self.star_logo.place(x=370, y=70+count)
 
-            self.button.place(x=20, y=22+count)
-            self.paper.place(x=75, y=20+count)
-            self.title.place(x=90, y=22+count)
-            self.text.place(x=95, y=60+count)
-            self.date.place(x=315, y=20+count)
+            self.button.place(x=20, y=12+count)
+            self.paper.place(x=75, y=10+count)
+            self.title.place(x=90, y=12+count)
+            self.text.place(x=95, y=50+count)
+            self.date.place(x=315, y=12+count)
             count += 120
             num += 1
 
@@ -219,6 +231,9 @@ class Findpage(Toplevel):
         self.find_box()
 
     def find_box(self):
+        """
+        Main UI for find page
+        """
         self.header = Frame(self, width=450, height=100, bg='gray')
         self.label = Label(self.header, text='Search', fg='white', bg='gray',\
                            font=('AngsanaUPC', 18, 'bold'))
@@ -243,6 +258,9 @@ class Findpage(Toplevel):
         self.body.pack(fill=BOTH, expand=True)
 
     def list_note(self, num=0):
+        """
+        Display list of note
+        """
         text = self.box.get().encode('utf-8')
         self.box.delete(0, END)
         self.list.destroy()
@@ -272,6 +290,9 @@ class Findpage(Toplevel):
         self.list.bind("<Double-Button-1>", self.open_page)
 
     def open_page(self, event):
+        """
+        Open select note
+        """
         widget = event.widget
         select = widget.curselection()
         value = widget.get(select[0])
@@ -287,8 +308,8 @@ class Notepage(Toplevel):
 
     def __init__(self, *args, **kwargs):
         Toplevel.__init__(self, *args, **kwargs)
-        self.bg_page = PhotoImage(file="bg_note.gif")
-        self.favorite_logo = PhotoImage(file="favorite.gif")
+        self.bg_page = PhotoImage(file="Image/bg_note.gif")
+        self.favorite_logo = PhotoImage(file="Image/favorite.gif")
 
     def note_pages(self, text_title, text_note, favorite):
         """
@@ -345,6 +366,9 @@ class About(Toplevel):
         self.credit()
 
     def credit(self):
+        """
+        Main UI about page
+        """
         self.frame = Frame(self, bg='#B7B7B7', width=250, height=100)
         self.frame.place(x=0, y=0)
         self.name = Label(self, text='Note That', fg='white', bg='#B7B7B7',
@@ -353,6 +377,23 @@ class About(Toplevel):
         self.label = Label(self, text='PSIT Project 2014'
                            , fg='white', bg='#B7B7B7', font=('Arial', 10, 'bold'))
         self.label.place(x=65, y=65)
+        self.text1 = Label(self, text='Create by', font=('Arial', 16))
+        self.text1.place(x=75, y=110)
+        self.text2 = Label(self, text='Adisorn  Sripakpaisit',
+                           font=('Arial', 10))
+        self.text2.place(x=60, y=150)
+        self.text3 = Label(self, text='Wisantoon jangwongwarus',
+                           font=('Arial', 10))
+        self.text3.place(x=42, y=175)
+        self.text4 = Label(self, text='Faculty of Information Technology',
+                           font=('Arial', 10))
+        self.text4.place(x=25, y=220)
+        self.text4 = Label(self, text="King Mongkut's \n Institute of Technology Ladkrabang",
+                           font=('Arial', 10))
+        self.text4.place(x=15, y=241)
+        self.button = Button(self, text='Close', command=self.destroy)
+        self.button.place(x=100, y=300)
+        
         
         
 class MainApp(Tk):
@@ -362,10 +403,10 @@ class MainApp(Tk):
 
     def __init__(self, *args, **kwargs):
         Tk.__init__(self, *args, **kwargs)
-        self.find_b = PhotoImage(file="Find_button.gif")
+        self.find_b = PhotoImage(file="Image/Find_button.gif")
         self.date = date()
         self.var = IntVar()
-        self.logo = PhotoImage(file='logo_app.gif')
+        self.logo = PhotoImage(file='Image/logo_app.gif')
         self.window()
 
     def note_storage(self):
