@@ -228,6 +228,8 @@ class Findpage(Toplevel):
                               relief=FLAT, command=self.list_note)
         self.button2 = Button(self.header, text='Cancel', bg='white', width=10,\
                               relief=FLAT, command=self.destroy)
+        self.favor = Button(self.header, text='Favorite', relief=FLAT, width=10,\
+                            bg='green', command=lambda: self.list_note(1))
         self.body = Frame(self, bg='white')
         self.list = Listbox(self.body, bg='white')
         self.body = Frame(self, bg='white')
@@ -235,8 +237,9 @@ class Findpage(Toplevel):
         self.header.pack()
         self.label.place(x=175, y=0)
         self.box.place(x=20, y=35)
-        self.button1.place(x=120, y=67)
-        self.button2.place(x=210, y=67)
+        self.button1.place(x=155, y=67)
+        self.button2.place(x=255, y=67)
+        self.favor.place(x=55, y=67)
         self.body.pack(fill=BOTH, expand=True)
 
     def list_note(self):
