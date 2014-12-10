@@ -1,5 +1,10 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+"""
+PSIT Project: Note That
+Author: Adisorn Sripakpaisit
+        Wisantoon jangwongwarus
+Last Update: 10/12/2014
+"""
+#---------------Import-----------------#
 from Tkinter import *
 from ScrolledText import ScrolledText
 import sqlite3 as sqlite
@@ -8,6 +13,7 @@ import tkMessageBox
 import sys
 reload(sys)
 sys.setdefaultencoding("utf-8")
+#--------------------------------------#
 
 def date():
     """
@@ -50,14 +56,26 @@ def get_data():
     all_data = {}
     data = sqlite.connect('Database.db')
     cur = data.cursor()
-    cur.execute("SELECT * FROM NoteStorage ORDER BY Title")
-    for i in cur:
-        if i[0] not in all_data:
-            all_data[i[0]] = []
-        all_data[i[0]].append(i[1])
-        all_data[i[0]].append(i[2])
-        all_data[i[0]].append(i[3])
-    return all_data
+    try:
+        cur.execute("SELECT * FROM NoteStorage ORDER BY Title")
+        for i in cur:
+            if i[0] not in all_data:
+                all_data[i[0]] = []
+            all_data[i[0]].append(i[1])
+            all_data[i[0]].append(i[2])
+            all_data[i[0]].append(i[3])
+        return all_data
+    except:
+        add_data('new', 'new', 'new', '0')
+        cur.execute("SELECT * FROM NoteStorage ORDER BY Title")
+        for i in cur:
+            if i[0] not in all_data:
+                all_data[i[0]] = []
+            all_data[i[0]].append(i[1])
+            all_data[i[0]].append(i[2])
+            all_data[i[0]].append(i[3])
+        return all_data
+        
 
 def get_favorite():
     '''
@@ -78,6 +96,9 @@ def get_favorite():
             
 
 class Note(Toplevel):
+    """
+    Display select Note
+    """
 
     def __init__(self, *args, **kwargs):
         Toplevel.__init__(self, *args, **kwargs)
@@ -407,7 +428,6 @@ class MainApp(Tk):
         self.date = date()
         self.var = IntVar()
         self.logo = PhotoImage(file='Image/logo_app.gif')
-        #self.window()
 
     def note_storage(self):
         """
