@@ -407,7 +407,7 @@ class MainApp(Tk):
         self.date = date()
         self.var = IntVar()
         self.logo = PhotoImage(file='Image/logo_app.gif')
-        self.window()
+        #self.window()
 
     def note_storage(self):
         """
@@ -445,15 +445,6 @@ class MainApp(Tk):
         find.geometry('400x500+475+145')
         find.resizable(width=False, height=False)
         find.title('Find your note')
-
-    def credit(self):
-        """
-        Open about page
-        """
-        about = About()
-        about.geometry('250x350+550+190')
-        about.resizable(width=False, height=False)
-        about.title('About')
 
     def window(self):
         """
@@ -510,17 +501,75 @@ class MainApp(Tk):
         self.fac = Label(self.last, fg='white', bg='#1E90FF', 
                          text="Faculty of Information Technology, KMITL")
         self.fac.place(x=110, y=3)
-        self.about = Button(self.last, bg='#1E90FF', text='?', fg='white',
-                            activeforeground='white', activebackground='#1E90FF'
-                            , command=self.credit, relief=FLAT, width=2,
-                            overrelief=RIDGE)
-        self.about.place(x=426, y=0)
+
+
+class Home(Tk):
+    """
+    Main window of home page
+    """
+
+    def __init__(self):
+        Tk.__init__(self)
+        self.back = PhotoImage(file='Image/background.gif')
+        self.logo = PhotoImage(file='Image/main_logo.gif')
+        self.note = PhotoImage(file='Image/note.gif')
+        self.about = PhotoImage(file='Image/about.gif')
+        self.exit = PhotoImage(file='Image/exit.gif')
+        
+    def main(self):
+        """
+        Open Main app
+        """
+        self.destroy()
+        app = MainApp()
+        app.resizable(width=False, height=False)
+        app.title("Note That")
+        app.geometry("450x600+450+90")
+        app.window()
+        app.mainloop()
+
+    def credit(self):
+        """
+        Open About page
+        """
+        about = About()
+        about.geometry('250x350+560+190')
+        about.resizable(0, 0)
+        about.title("About")
+
+    def flat(self, event):
+        """
+        Keep FLAT button
+        """
+        event.widget.config(relief=FLAT)
+
+    def welcome(self):
+        """
+        Main UI
+        """
+        self.bg = Label(self, image=self.back)
+        self.logo_name = Label(self, image=self.logo, bg='#f8f6f4')
+        self.button1 = Button(self, image=self.note, bg='#f8f6f4', relief=FLAT,
+                              command=self.main)
+        self.button2 = Button(self, image=self.about, bg='#f8f6f4', relief=FLAT,
+                              command=self.credit)
+        self.button3 = Button(self, image=self.exit, bg='#f8f6f4', relief=FLAT,
+                              command=self.destroy)
+
+        self.bg.place(x=-2, y=-2)
+        self.logo_name.place(x=50, y=90)
+        self.button1.place(x=60, y=210)
+        self.button2.place(x=60, y=310)
+        self.button3.place(x=60, y=410)
+        self.bind("<Button-1>", self.flat)
 
         
 if __name__ == "__main__":
-    app = MainApp()
+    app = Home()
     app.resizable(width = False, height = False)
     app.title("Note That")
     app.geometry("450x600+450+90")
+    app.welcome()
     app.mainloop()
+    app.destroy()
     
