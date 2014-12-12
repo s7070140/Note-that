@@ -356,12 +356,11 @@ class Notepage(Toplevel):
         self.new_note.place(x=15, y=0)
 
         #note
-        self.paper = Frame(self, width=300, height=350, bg='#FFECA5')
-        self.paper.place(x=25, y=80)
-        self.word = Label(self.paper, text=text_note, justify=LEFT,
-                          font=('AngsanaUPC', 14), padx=10, pady=10,
-                          bg='#FFECA5', wraplength=280)
-        self.word.place(x=0, y=0)
+        self.txt = ScrolledText(self, width=47, height=13, bg='#FFECA5',\
+                                font=('AngsanaUPC', 14), relief=FLAT)
+        self.txt.insert('1.0', text_note)
+        self.txt.config(state='disable')
+        self.txt.place(x=25, y=80)
 
         #Button
         self.ok = Button(self, text='Ok', bg='#02d602', relief=FLAT,
