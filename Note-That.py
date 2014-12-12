@@ -1,13 +1,15 @@
 """
 PSIT Project: Note That
-Author: Adisorn Sripakpaisit
-        Wisantoon jangwongwarus
-Last Update: 10/12/2014
+Developers: Adisorn Sripakpaisit
+            Wisantoon jangwongwarus
 """
 #---------------Import-----------------#
-from Tkinter import *
+try:
+    from Tkinter import *
+except:
+    from tkinter import *
 from ScrolledText import ScrolledText
-import sqlite3 as sqlite
+import sqlite3 as sql
 import datetime
 import tkMessageBox
 import sys
@@ -17,7 +19,7 @@ sys.setdefaultencoding("utf-8")
 
 def date():
     """
-    Return current time
+    Return current date
     """
     day = int(datetime.date.today().strftime("%d"))
     month = datetime.date.today().strftime("%B")
@@ -25,12 +27,12 @@ def date():
     date_now = "%s %s %s" % (day, month, year)
     return date_now
 
-def add_data(title, text, datetime, important):
+def add_data(title, text, datetime, favorite):
     """
     Add new data to database
     """
-    new_data = [title, text, datetime, important]
-    data = sqlite.connect('Database.db')
+    new_data = [title, text, datetime, favorite]
+    data = sql.connect('Database.db')
     data.text_factory = str
     cur = data.cursor()
     cur.execute('''CREATE TABLE IF NOT EXISTS NoteStorage
@@ -43,7 +45,7 @@ def delete_data(title):
     """
     Delete select data in database
     """
-    data = sqlite.connect("Database.db")
+    data = sql.connect("Database.db")
     cur = data.cursor()
     cur.execute("DELETE FROM NoteStorage WHERE Title = '%s'" % title)
     data.commit()
@@ -54,7 +56,7 @@ def get_data():
     Return all data in database as a dict
     """
     all_data = {}
-    data = sqlite.connect('Database.db')
+    data = sql.connect('Database.db')
     cur = data.cursor()
     try:
         cur.execute("SELECT * FROM NoteStorage ORDER BY Title")
@@ -67,6 +69,7 @@ def get_data():
         return all_data
     except:
         add_data('new', 'new', 'new', '0')
+        delete_data('new')
         cur.execute("SELECT * FROM NoteStorage ORDER BY Title")
         for i in cur:
             if i[0] not in all_data:
@@ -82,7 +85,7 @@ def get_favorite():
     Return all favorite note
     '''
     favor_data = {}
-    data = sqlite.connect('Database.db')
+    data = sql.connect('Database.db')
     cur = data.cursor()
     all_data = cur.execute('SELECT * FROM NoteStorage ORDER BY Title')
     for i in all_data:
@@ -561,7 +564,7 @@ class Home(Tk):
         """
         Keep FLAT button
         """
-        event.widget.config(relief=FLAT)
+        event.widget.config(relief=FLAT, activebackground='#f8f6f4')
 
     def welcome(self):
         """
