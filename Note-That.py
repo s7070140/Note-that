@@ -119,32 +119,39 @@ class Note(Toplevel):
         data = get_data()[title]
 
         self.bg = Label(self, image=self.background)
-        self.bg.place(x=0, y=0)
+        
 
         self.header = Frame(self, bg='#FF8400', width=350, height=50)
-        self.header.place(x=0, y=0)
+        
         self.title = Label(self.header, text=title, bg='#FF8400', fg='white',
                            font=('AngsanaUPC', 24, 'bold'))
-        self.title.place(x=10, y=-1)
+        
 
         self.paper = Frame(self, width=300, height=350, bg='#FFECA5')
-        self.paper.place(x=25, y=80)
+        
         self.word = Label(self.paper, text=data[0], justify=LEFT,
                           font=('AngsanaUPC', 14), padx=10, pady=10,
                           bg='#FFECA5', wraplength=280)
-        self.word.place(x=0, y=0)
+        
 
         self.ok = Button(self, text='Ok', bg='#02d602', relief=FLAT,
                          width=10, fg='white', font=('Arial', 10, 'bold'),
                          command=self.destroy, activebackground='white',
                          activeforeground='#02d602')
-        self.ok.place(x=140, y=445)
+        
         self.delete = Button(self, text='Delete', bg='red', relief=FLAT,
                              width=10, fg='white', font=('Arial', 10, 'bold'),
                              activebackground='white', activeforeground=
                              'red', command=lambda
                              title=title: self.delete_select(title))
+        
+        self.bg.place(x=-2, y=0)
+        self.header.place(x=0, y=0)
+        self.title.place(x=10, y=-1)
+        self.ok.place(x=140, y=445)
         self.delete.place(x=235, y=445)
+        self.txt.place(x=25, y=80)
+        
         if data[2] == '1':
             self.favor = Label(self, image=self.image, bg='#FF8400')
             self.favor.place(x=286, y=-1)
