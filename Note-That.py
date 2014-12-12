@@ -147,8 +147,6 @@ class Note(Toplevel):
             self.favor = Label(self, image=self.image, bg='#FF8400')
             self.favor.place(x=286, y=-1)
 
-
-
 class NoteStorage(Toplevel):
     
     def __init__(self, *args, **kwargs):
@@ -169,7 +167,6 @@ class NoteStorage(Toplevel):
         self.scr = Scrollbar(self.canvas, orient='vertical',
                              command=self.canvas.yview)
         self.canvas.configure(yscrollcommand=self.scr.set)
-
         self.header.pack()
         self.logo.place(x=125, y=7)
         self.canvas.pack(fill=BOTH, expand=True)
@@ -216,7 +213,6 @@ class NoteStorage(Toplevel):
             if num % 2 == 0: color = 'gray'
             else: color = 'white'
             self.back = LabelFrame(self.frame, bg=color, width=410, height=115)
-            self.back.place(x=13, y=count)
             self.button = Button(self.frame, text=num, fg='white', bg='#ff8400',
                                  relief=FLAT, width=3,
                                  font=('Arial', 16, 'bold'),
@@ -231,7 +227,8 @@ class NoteStorage(Toplevel):
             if data[i][2] == '1':
                 self.star_logo = Label(self.frame, image=self.star, bg='#fff6aa')
                 self.star_logo.place(x=370, y=70+count)
-
+                
+            self.back.place(x=13, y=count)
             self.button.place(x=20, y=12+count)
             self.paper.place(x=75, y=10+count)
             self.title.place(x=90, y=12+count)
@@ -345,34 +342,36 @@ class Notepage(Toplevel):
         
         #Background
         self.background = Label(self, image=self.bg_page)
-        self.background.place(x=0, y=0)
         
         #header and title
         self.decorate = Frame(self, bg='#FF8400', width=350, height=50)
-        self.decorate.place(x=0, y=0)
         self.new_note = Label(self.decorate, text=text_title,
                               bg='#FF8400', fg='white',
                               font=('AngsanaUPC', 24, 'bold'))
-        self.new_note.place(x=15, y=0)
 
         #note
         self.txt = ScrolledText(self, width=47, height=13, bg='#FFECA5',\
                                 font=('AngsanaUPC', 14), relief=FLAT)
         self.txt.insert('1.0', text_note)
         self.txt.config(state='disable')
-        self.txt.place(x=25, y=80)
 
         #Button
         self.ok = Button(self, text='Ok', bg='#02d602', relief=FLAT,
                          width=10, fg='white', font=('Arial', 10, 'bold'),
                          command=add_destroy, activebackground='white',
                          activeforeground='#02d602')
-        self.ok.place(x=140, y=445)
         self.cancel = Button(self, text='Cancel', bg='#a0a0a0', relief=FLAT,
                              width=10, fg='white', font=('Arial', 10, 'bold'),
                              activebackground='white', activeforeground=
                              '#a0a0a0', command=self.destroy)
+        
+        self.background.place(x=0, y=0)
+        self.decorate.place(x=0, y=0)
+        self.new_note.place(x=15, y=0)
+        self.txt.place(x=25, y=80)
+        self.ok.place(x=140, y=445)
         self.cancel.place(x=235, y=445)
+        
         if favorite == 1:
             self.favor = Label(self, image=self.favorite_logo, bg='#FF8400')
             self.favor.place(x=286, y=-1)
@@ -388,31 +387,30 @@ class About(Toplevel):
         Main UI about page
         """
         self.frame = Frame(self, bg='#B7B7B7', width=250, height=100)
-        self.frame.place(x=0, y=0)
         self.name = Label(self, text='Note That', fg='white', bg='#B7B7B7',
                           font=('Arial', 30, 'bold'))
-        self.name.place(x=35, y=10)
         self.label = Label(self, text='PSIT Project 2014'
                            , fg='white', bg='#B7B7B7', font=('Arial', 10, 'bold'))
-        self.label.place(x=65, y=65)
         self.text1 = Label(self, text='Create by', font=('Arial', 16))
-        self.text1.place(x=75, y=110)
         self.text2 = Label(self, text='Adisorn  Sripakpaisit',
                            font=('Arial', 10))
-        self.text2.place(x=60, y=150)
         self.text3 = Label(self, text='Wisantoon jangwongwarus',
                            font=('Arial', 10))
-        self.text3.place(x=42, y=175)
         self.text4 = Label(self, text='Faculty of Information Technology',
                            font=('Arial', 10))
-        self.text4.place(x=25, y=220)
         self.text4 = Label(self, text="King Mongkut's \n Institute of Technology Ladkrabang",
                            font=('Arial', 10))
-        self.text4.place(x=15, y=241)
         self.button = Button(self, text='Close', command=self.destroy)
+
+        self.frame.place(x=0, y=0)
+        self.name.place(x=35, y=10)
+        self.label.place(x=65, y=65)
+        self.text1.place(x=75, y=110)
+        self.text2.place(x=60, y=150)
+        self.text3.place(x=42, y=175)
+        self.text4.place(x=25, y=220)
+        self.text4.place(x=15, y=241)
         self.button.place(x=100, y=300)
-        
-        
         
 class MainApp(Tk):
     """
@@ -469,56 +467,55 @@ class MainApp(Tk):
         """
         #Header#
         self.header = Frame(self, width=450, height=65, bg='#1E90FF')
-        self.header.place(x=0, y=0)
         self.logo_name = Label(self.header, image=self.logo, bg='#1E90FF')
-        self.logo_name.place(x=15, y=5)
         self.datetime = Label(self, text=self.date)
-        self.datetime.place(x=325, y=75)
-
+        
         #Input#
         self.title_name = Label(self, text="Title", font=('Arial', 12,))
-        self.title_name.place(x=20, y=80)
         self.title_box = Entry(self, width = 58, bg='white', relief=FLAT,  
                                 font=('AngsanaUPC', 15))
-        self.title_box.place(x=20, y=110)
-
         self.note_text = Label(self, text="Your Note", font=('Arial', 12,))
-        self.note_text.place(x=20, y=150)
         self.note_box = ScrolledText(self, font=('AngsanaUPC', 14), width=65,
                                      relief=FLAT, bg='white', height=9)
-        self.note_box.place(x=20, y=185)
-
+        
         #Check list
         self.check = Checkbutton(self, text='Favorite', bg='#FEFF92',
                       variable=self.var, activebackground='#FEFF92',
                       width=55, justify='left')
-        self.check.place(x=20, y=423)
         
         #Button#
         self.add_note = Button(self, width=45, text="Add Note", 
                                bg='green', relief=FLAT, font=('Arial', 11, 'bold')
                                , command=self.create_note, fg='white',
                                activeforeground='green')
-        self.add_note.place(x=20, y=457)
         self.find_note = Button(self.header, image=self.find_b, relief=FLAT, 
                               bg='gray', font=('Arial', 13, 'bold')
                                 , command=self.find_notes, width=68, height=59,
                                 overrelief=RIDGE, activebackground='#1E90FF')
-        self.find_note.place(x=376, y=0)
         self.all = Button(self, width=31, height=2, fg='white', 
                                 text="Note Storage", bg='#009cff',
                                 relief=FLAT, activeforeground='#009cff', 
                                 font=('Arial', 16, 'bold'),
                           command=self.note_storage)
-        self.all.place(x=20, y=500)
 
         #Footer#
         self.last = Frame(self, bg='#1E90FF', width=450, height=25)
-        self.last.place(x=0, y=575)
         self.fac = Label(self.last, fg='white', bg='#1E90FF', 
                          text="Faculty of Information Technology, KMITL")
-        self.fac.place(x=110, y=3)
 
+        self.header.place(x=0, y=0)
+        self.logo_name.place(x=15, y=5)
+        self.datetime.place(x=325, y=75)
+        self.title_name.place(x=20, y=80)
+        self.title_box.place(x=20, y=110)
+        self.note_text.place(x=20, y=150)
+        self.note_box.place(x=20, y=185)
+        self.check.place(x=20, y=423)
+        self.add_note.place(x=20, y=457)
+        self.find_note.place(x=376, y=0)
+        self.all.place(x=20, y=500)
+        self.last.place(x=0, y=575)
+        self.fac.place(x=110, y=3)
 
 class Home(Tk):
     """
