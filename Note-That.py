@@ -119,26 +119,17 @@ class Note(Toplevel):
         data = get_data()[title]
 
         self.bg = Label(self, image=self.background)
-        
-
         self.header = Frame(self, bg='#FF8400', width=350, height=50)
-        
         self.title = Label(self.header, text=title, bg='#FF8400', fg='white',
                            font=('AngsanaUPC', 24, 'bold'))
-        
-
-        self.paper = Frame(self, width=300, height=350, bg='#FFECA5')
-        
-        self.word = Label(self.paper, text=data[0], justify=LEFT,
-                          font=('AngsanaUPC', 14), padx=10, pady=10,
-                          bg='#FFECA5', wraplength=280)
-        
-
+        self.txt = ScrolledText(self, width=47, height=13, bg='#FFECA5',\
+                                font=('AngsanaUPC', 14), relief=FLAT)
+        self.txt.insert('1.0', data[0])
+        self.txt.config(state='disable')
         self.ok = Button(self, text='Ok', bg='#02d602', relief=FLAT,
                          width=10, fg='white', font=('Arial', 10, 'bold'),
                          command=self.destroy, activebackground='white',
                          activeforeground='#02d602')
-        
         self.delete = Button(self, text='Delete', bg='red', relief=FLAT,
                              width=10, fg='white', font=('Arial', 10, 'bold'),
                              activebackground='white', activeforeground=
