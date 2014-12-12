@@ -394,7 +394,7 @@ class About(Toplevel):
         self.text1 = Label(self, text='Create by', font=('Arial', 16))
         self.text2 = Label(self, text='Adisorn  Sripakpaisit',
                            font=('Arial', 10))
-        self.text3 = Label(self, text='Wisantoon jangwongwarus',
+        self.text3 = Label(self, text='Wisantoon Jangwongwarus',
                            font=('Arial', 10))
         self.text4 = Label(self, text='Faculty of Information Technology',
                            font=('Arial', 10))
