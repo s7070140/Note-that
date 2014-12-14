@@ -102,8 +102,8 @@ class Note(Toplevel):
     Display select Note
     """
 
-    def __init__(self, window, *args, **kwargs):
-        Toplevel.__init__(self, window, *args, **kwargs)
+    def __init__(self, window=None, *args, **kwargs):
+        Toplevel.__init__(self, window=None, *args, **kwargs)
         self.background = PhotoImage(file='Image/note_bg1.gif')
         self.image = PhotoImage(file='Image/favorite.gif')
         self.window = window
@@ -226,6 +226,7 @@ class NoteStorage(Toplevel):
                 text = text[:30] + '...'
             if num % 2 == 0: color = 'gray'
             else: color = 'white'
+            
             self.back = LabelFrame(self.frame, bg=color, width=410, height=115)
             self.button = Button(self.frame, text=num, fg='white', bg='#ff8400',
                                  relief=FLAT, width=3,
