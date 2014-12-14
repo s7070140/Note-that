@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
 PSIT Project: Note That
 Developers: Adisorn Sripakpaisit
@@ -12,9 +14,6 @@ from ScrolledText import ScrolledText
 import sqlite3 as sql
 import datetime
 import tkMessageBox
-import sys
-reload(sys)
-sys.setdefaultencoding("utf-8")
 #--------------------------------------#
 
 def date():
@@ -151,6 +150,9 @@ class Note(Toplevel):
             self.favor.place(x=286, y=-1)
 
 class NoteStorage(Toplevel):
+    """
+    Note storage page
+    """
     
     def __init__(self, *args, **kwargs):
         Toplevel.__init__(self, *args, **kwargs)
@@ -208,26 +210,28 @@ class NoteStorage(Toplevel):
         """
         count = 5
         num = 1
-        data = get_data()
-        for i in data:
-            text = data[i][0].splitlines()[0]
-            if len(text) > 50:
-                text = text[:50] + '...'
+        data = sql.connect('Database.db')
+        cur = data.cursor()
+        cur.execute("SELECT * FROM NoteStorage")
+        for i in cur:
+            text = i[1].splitlines()[0]
+            if len(text) > 30:
+                text = text[:30] + '...'
             if num % 2 == 0: color = 'gray'
             else: color = 'white'
             self.back = LabelFrame(self.frame, bg=color, width=410, height=115)
             self.button = Button(self.frame, text=num, fg='white', bg='#ff8400',
                                  relief=FLAT, width=3,
                                  font=('Arial', 16, 'bold'),
-                                 command=lambda i=i: self.open_page(i))
+                                 command=lambda i=i: self.open_page(i[0]))
             self.paper = Label(self.frame, image=self.papers, bg=color)
-            self.title = Label(self.frame, text=i, bg='#fff6aa',
+            self.title = Label(self.frame, text=i[0], bg='#fff6aa',
                                font=('AngsanaUPC', 15, 'bold'))
             self.text = Label(self.frame, text=text, bg='#fff6aa',
                               font=('AngsanaUPC', 12), justify=LEFT)
-            self.date = Label(self.frame, text=data[i][1], bg='#fff6aa',
+            self.date = Label(self.frame, text=i[2], bg='#fff6aa',
                               font=('AngsanaUPC', 12))
-            if data[i][2] == '1':
+            if i[3] == '1':
                 self.star_logo = Label(self.frame, image=self.star, bg='#fff6aa')
                 self.star_logo.place(x=370, y=70+count)
                 
@@ -239,7 +243,8 @@ class NoteStorage(Toplevel):
             self.date.place(x=315, y=12+count)
             count += 120
             num += 1
-
+        data.close()
+            
 
 class Findpage(Toplevel):
     """
@@ -280,7 +285,7 @@ class Findpage(Toplevel):
         """
         Display list of note
         """
-        text = self.box.get().encode('utf-8')
+        text = self.box.get()
         self.box.delete(0, END)
         self.list.destroy()
         self.list = Listbox(self.body, bg='white', relief=FLAT,\
@@ -441,10 +446,18 @@ class MainApp(Tk):
         """
         Create new note page
         """
-        title_name = self.title_box.get().encode('utf-8')
-        note_text = self.note_box.get('1.0', END).encode('utf-8')
+        title_name = self.title_box.get()
+        note_text = self.note_box.get('1.0', END)
         favorite = self.var.get()
-        if title_name != '' and note_text != '' and title_name not in get_data():
+
+        count = 0
+        for i in get_data():
+            if title_name == i:
+                break
+            else:
+                count += 1
+        
+        if title_name != '' and note_text != '' and count == len(get_data()):
             self.title_box.delete(0, END)
             self.note_box.delete('1.0', END)
             note_page = Notepage()
@@ -588,5 +601,5 @@ if __name__ == "__main__":
     app.geometry("450x600+450+90")
     app.welcome()
     app.mainloop()
-    app.destroy()
+
     
