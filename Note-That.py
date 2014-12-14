@@ -102,10 +102,11 @@ class Note(Toplevel):
     Display select Note
     """
 
-    def __init__(self, *args, **kwargs):
-        Toplevel.__init__(self, *args, **kwargs)
+    def __init__(self, window, *args, **kwargs):
+        Toplevel.__init__(self, window, *args, **kwargs)
         self.background = PhotoImage(file='Image/note_bg1.gif')
         self.image = PhotoImage(file='Image/favorite.gif')
+        self.window = window
 
     def delete_select(self, title):
         """Delete data and destroy current window"""
@@ -113,6 +114,12 @@ class Note(Toplevel):
         if ask == 'yes':
             delete_data(title)
             self.destroy()
+            self.window.destroy()
+            note_store = NoteStorage()
+            note_store.geometry('450x600+450+90')
+            note_store.title('Note Storage')
+            note_store.resizable(width=False, height=False)
+            note_store.all_note()
 
     def my_note(self, title):
         """
@@ -198,7 +205,7 @@ class NoteStorage(Toplevel):
         """
         Open select note
         """
-        page = Note()
+        page = Note(self)
         page.geometry('350x500+500+150')
         page.title('Title' + ' ' + '-' + ' ' + title)
         page.my_note(title)
