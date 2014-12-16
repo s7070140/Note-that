@@ -175,6 +175,11 @@ class Note(Toplevel):
         self.delete.config(relief=FLAT, bg='white')
         self.ok.config(bg='white')
         self.edit.config(bg='white')
+
+    def button_edit1(self, event):
+        self.delete.config(bg='#AFAFAF')
+        self.ok.config(bg='#AFAFAF')
+        self.edit.config(bg='#AFAFAF', relief=GROOVE)
         
 
 class NoteStorage(Toplevel):
