@@ -122,35 +122,43 @@ class Note(Toplevel):
             note_store.all_note()
 
     def my_note(self, title):
-        """
-        Create UI for note
-        """
+        """Main UI for note"""
         data = get_data()[title]
-
+        data = get_data()[title]
         self.bg = Label(self, image=self.background)
         self.header = Frame(self, bg='#FF8400', width=350, height=50)
         self.title = Label(self.header, text=title, bg='#FF8400', fg='white',
                            font=('AngsanaUPC', 24, 'bold'))
-        self.txt = ScrolledText(self, width=47, height=13, bg='#FFECA5',\
+        self.txt = ScrolledText(self, width=47, height=15, bg='#FFECA5',\
                                 font=('AngsanaUPC', 14), relief=FLAT)
         self.txt.insert('1.0', data[0])
         self.txt.config(state='disable')
-        self.ok = Button(self, text='Ok', bg='#02d602', relief=FLAT,
-                         width=10, fg='white', font=('Arial', 10, 'bold'),
-                         command=self.destroy, activebackground='white',
-                         activeforeground='#02d602')
-        self.delete = Button(self, text='Delete', bg='red', relief=FLAT,
-                             width=10, fg='white', font=('Arial', 10, 'bold'),
-                             activebackground='white', activeforeground=
-                             'red', command=lambda
+        self.ok = Button(self, text='Ok', bg='white', relief=FLAT,
+                         width=13, font=('Arial', 10, 'bold'),
+                         command=lambda title=title: self.check_edit(title),
+                         activebackground='#3FBB06')
+        self.delete = Button(self, text='Delete', bg='white', relief=FLAT,
+                             width=13, font=('Arial', 10, 'bold'),
+                             activebackground='#C62F2F', command=lambda
                              title=title: self.delete_select(title))
+        self.edit = Button(self, text='Edit', bg='white', font=('Arial', 10, 'bold'),
+                           activebackground='white', command=self.make_edit,
+                           relief=FLAT, width=14)
+
+        self.ok.bind("<Enter>", self.button_ok1)
+        self.ok.bind("<Leave>", self.button_ok2)
+        self.delete.bind("<Enter>", self.button_delete1)
+        self.delete.bind("<Leave>", self.button_delete2)
+        self.edit.bind("<Enter>", self.button_edit1)
+        self.edit.bind("<Leave>", self.button_edit2)
         
         self.bg.place(x=-2, y=0)
         self.header.place(x=0, y=0)
         self.title.place(x=10, y=-1)
-        self.ok.place(x=140, y=445)
-        self.delete.place(x=235, y=445)
-        self.txt.place(x=25, y=80)
+        self.ok.place(x=236, y=472)
+        self.delete.place(x=0, y=472)
+        self.txt.place(x=25, y=65)
+        self.edit.place(x=114, y=472)
         
         if data[2] == '1':
             self.favor = Label(self, image=self.image, bg='#FF8400')
