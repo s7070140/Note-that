@@ -180,6 +180,11 @@ class Note(Toplevel):
         self.delete.config(bg='#AFAFAF')
         self.ok.config(bg='#AFAFAF')
         self.edit.config(bg='#AFAFAF', relief=GROOVE)
+
+    def button_edit2(self, event):
+        self.delete.config(bg='white')
+        self.ok.config(bg='white')
+        self.edit.config(relief=FLAT, bg='white')
         
 
 class NoteStorage(Toplevel):
