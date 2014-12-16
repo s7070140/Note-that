@@ -189,6 +189,27 @@ class Note(Toplevel):
 
     def make_edit(self):
         self.txt.config(state='normal')
+
+    def check_edit(self, title):
+        old = get_data()[title][0].splitlines()
+        new = self.txt.get('1.0', END).splitlines()
+        star = get_data()[title][2]
+        for i in new:
+            if i == '':
+                new.remove(i)
+        if new != old:
+            tkMessageBox.showinfo('Status', 'Complete')
+            add_data(title, self.txt.get('1.0', END), date(), star)
+            self.destroy()
+            if self.window != None:
+                self.window.destroy()
+                note_store = NoteStorage()
+                note_store.geometry('450x600+450+90')
+                note_store.title('Note Storage')
+                note_store.resizable(width=False, height=False)
+                note_store.all_note()
+        else:
+            self.destroy()
         
 class NoteStorage(Toplevel):
     """
