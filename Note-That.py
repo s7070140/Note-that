@@ -185,8 +185,11 @@ class Note(Toplevel):
         self.delete.config(bg='white')
         self.ok.config(bg='white')
         self.edit.config(relief=FLAT, bg='white')
-        
 
+
+    def make_edit(self):
+        self.txt.config(state='normal')
+        
 class NoteStorage(Toplevel):
     """
     Note storage page
