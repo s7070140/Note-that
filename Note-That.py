@@ -155,6 +155,11 @@ class Note(Toplevel):
         if data[2] == '1':
             self.favor = Label(self, image=self.image, bg='#FF8400')
             self.favor.place(x=286, y=-1)
+            
+    def button_ok1(self, event):
+        self.ok.config(relief=GROOVE, bg='#44D002')
+        self.edit.config(bg='#44D002')
+        self.delete.config(bg='#44D002')
 
 class NoteStorage(Toplevel):
     """
