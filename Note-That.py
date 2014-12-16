@@ -553,6 +553,9 @@ class Home(Tk):
         self.note = PhotoImage(file='Image/note.gif')
         self.about = PhotoImage(file='Image/about.gif')
         self.exit = PhotoImage(file='Image/exit.gif')
+        self.note_press = PhotoImage(file='Image/note2.gif')
+        self.about_press = PhotoImage(file='Image/about2.gif')
+        self.exit_press = PhotoImage(file='Image/exit2.gif')
         
     def main(self):
         """
@@ -576,10 +579,32 @@ class Home(Tk):
         about.title("About")
 
     def flat(self, event):
-        """
-        Keep FLAT button
-        """
+        """Event widget flat"""
         event.widget.config(relief=FLAT, activebackground='#f8f6f4')
+
+    def press_note1(self, event):
+        """Event when press button"""
+        self.button1.config(image=self.note_press)
+
+    def press_note2(self, event):
+        """Event when release button"""
+        self.button1.config(image=self.note)
+
+    def press_about1(self, event):
+        """Event when press button"""
+        self.button2.config(image=self.about_press)
+
+    def press_about2(self, event):
+        """Event when release button"""
+        self.button2.config(image=self.about)
+
+    def press_exit1(self, event):
+        """Event when press button"""
+        self.button3.config(image=self.exit_press)
+
+    def press_exit2(self, event):
+        """Event when release button"""
+        self.button3.config(image=self.exit)
 
     def welcome(self):
         """
@@ -599,7 +624,14 @@ class Home(Tk):
         self.button1.place(x=60, y=210)
         self.button2.place(x=60, y=310)
         self.button3.place(x=60, y=410)
+        
         self.bind("<Button-1>", self.flat)
+        self.button1.bind("<Button-1>", self.press_note1)
+        self.button1.bind("<ButtonRelease-1>", self.press_note2)
+        self.button2.bind("<Button-1>", self.press_about1)
+        self.button2.bind("<ButtonRelease-1>", self.press_about2)
+        self.button3.bind("<Button-1>", self.press_exit1)
+        self.button3.bind("<ButtonRelease-1>", self.press_exit2)
 
         
 if __name__ == "__main__":
