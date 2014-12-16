@@ -35,8 +35,8 @@ def add_data(title, text, datetime, favorite):
     data.text_factory = str
     cur = data.cursor()
     cur.execute('''CREATE TABLE IF NOT EXISTS NoteStorage
-                (Title text, Notedata text, DateTime text, Important text)''')
-    cur.execute("INSERT INTO NoteStorage VALUES (?, ?, ?, ?)", new_data)
+                (Title text primary key, Notedata text, DateTime text, Important text)''')
+    cur.execute("INSERT OR REPLACE INTO NoteStorage VALUES (?, ?, ?, ?)", new_data)
     data.commit()
     data.close()
 
