@@ -514,9 +514,7 @@ class MainApp(Tk):
         note_store.all_note()
 
     def create_note(self):
-        """
-        Create new note page
-        """
+        """Create new note page"""
         title_name = self.title_box.get()
         note_text = self.note_box.get('1.0', END)
         favorite = self.var.get()
@@ -528,16 +526,29 @@ class MainApp(Tk):
             else:
                 count += 1
         
-        if title_name != '' and note_text != '' and count == len(get_data()):
-            self.title_box.delete(0, END)
-            self.note_box.delete('1.0', END)
-            note_page = Notepage()
-            note_page.geometry('350x500+500+150')
-            note_page.title('New note' + ' ' + ':' + ' ' + title_name)
-            note_page.resizable(width=False, height=False)
-            note_page.note_pages(title_name, note_text, favorite)
-        elif title_name in get_data():
-            error = tkMessageBox.showerror('Error', 'Duplicate title name!')
+        if title_name != '' and note_text != '':
+            if count != len(get_data()):
+                ask = tkMessageBox.askquestion\
+                      ("Replace note", "Are you want to replace?",
+                       icon="warning")
+                if ask == 'yes':
+                    self.title_box.delete(0, END)
+                    self.note_box.delete('1.0', END)
+                    note_page = NoteCreate()
+                    note_page.geometry('350x500+500+150')
+                    note_page.title('New note' + ' ' + ':' + ' ' + title_name)
+                    note_page.resizable(width=False, height=False)
+                    note_page.note_page(title_name, note_text, favorite)
+            else:
+                self.title_box.delete(0, END)
+                self.note_box.delete('1.0', END)
+                note_page = NoteCreate()
+                note_page.geometry('350x500+500+150')
+                note_page.title('New note' + ' ' + ':' + ' ' + title_name)
+                note_page.resizable(width=False, height=False)
+                note_page.note_page(title_name, note_text, favorite)
+        else:
+            error = tkMessageBox.showerror('Error', 'Please input your note!')
 
     def find_notes(self):
         """
