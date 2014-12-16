@@ -161,6 +161,11 @@ class Note(Toplevel):
         self.edit.config(bg='#44D002')
         self.delete.config(bg='#44D002')
 
+    def button_ok2(self, event):
+        self.ok.config(relief=FLAT, bg='white')
+        self.edit.config(bg='white')
+        self.delete.config(bg='white')
+
 class NoteStorage(Toplevel):
     """
     Note storage page
