@@ -112,6 +112,7 @@ class MainApp(Tk):
         Tk.__init__(self)
         self.find_b = PhotoImage(file="Image/Find_button.gif")
         self.logo = PhotoImage(file='Image/logo_app.gif')
+        self.find_b2 = PhotoImage(file='Image/find_b2.gif')
         self.date = date()
         self.var = IntVar()
 
@@ -132,16 +133,16 @@ class MainApp(Tk):
         self.add_note = Button(self, width=45, text="Add Note", 
                                bg='green', relief=FLAT, font=('Arial', 11, 'bold')
                                , command=self.create_note, fg='white',
-                               activeforeground='green')
+                               activebackground='#13AA02', activeforeground='white')
         self.find_note = Button(self.header, image=self.find_b, relief=FLAT, 
                               bg='gray', font=('Arial', 13, 'bold')
                                 , command=self.find_notes, width=68, height=59,
-                                overrelief=RIDGE, activebackground='#1E90FF')
+                                activebackground='#1E90FF')
         self.all = Button(self, width=31, height=2, fg='white', 
                                 text="Note Storage", bg='#009cff',
-                                relief=FLAT, activeforeground='#009cff', 
+                                relief=FLAT, activeforeground='white', 
                                 font=('Arial', 16, 'bold'),
-                          command=self.note_storage)
+                          command=self.note_storage, activebackground='#0069C6')
         self.last = Frame(self, bg='#1E90FF', width=450, height=25)
         self.fac = Label(self.last, fg='white', bg='#1E90FF', 
                          text="Faculty of Information Technology, KMITL")
@@ -159,6 +160,9 @@ class MainApp(Tk):
         self.all.place(x=20, y=500)
         self.last.place(x=0, y=575)
         self.fac.place(x=110, y=3)
+        self.bind("<Button-1>", self.flat)
+        self.find_note.bind("<Button-1>", self.find_press)
+        self.find_note.bind("<ButtonRelease-1>", self.find_release)
         
     def note_storage(self):
         """Create Note Storage page"""
@@ -211,6 +215,18 @@ class MainApp(Tk):
         find.geometry('400x500+475+145')
         find.resizable(width=False, height=False)
         find.title('Find your note')
+
+    def flat(self, event):
+        """Event widget flat"""
+        event.widget.config(relief=FLAT)
+
+    def find_press(self, event):
+        """Event button press"""
+        self.find_note.config(image=self.find_b2)
+
+    def find_release(self, event):
+        """Event button release"""
+        self.find_note.config(image=self.find_b)
 
 
 class Findpage(Toplevel):
@@ -317,12 +333,12 @@ class NoteCreate(Toplevel):
         self.txt.config(state='disable')
         self.ok = Button(self, text='Ok', bg='#02d602', relief=FLAT,
                          width=10, fg='white', font=('Arial', 10, 'bold'),
-                         command=add_destroy, activebackground='white',
-                         activeforeground='#02d602')
+                         command=add_destroy, activebackground='#49B203',
+                         activeforeground='white')
         self.cancel = Button(self, text='Cancel', bg='#a0a0a0', relief=FLAT,
                              width=10, fg='white', font=('Arial', 10, 'bold'),
-                             activebackground='white', activeforeground=
-                             '#a0a0a0', command=self.destroy)
+                             activebackground='#838483', activeforeground=
+                             'white', command=self.destroy)
         
         self.background.place(x=0, y=0)
         self.decorate.place(x=0, y=0)
@@ -335,6 +351,12 @@ class NoteCreate(Toplevel):
             self.favor = Label(self, image=self.favorite_logo, bg='#FF8400')
             self.favor.place(x=286, y=-1)
 
+        self.bind("<Button-1>", self.flat)
+        
+    def flat(self, event):
+        """Event widget flat"""
+        event.widget.config(relief=FLAT)
+    
 
 class NoteStorage(Toplevel):
     """
@@ -365,6 +387,7 @@ class NoteStorage(Toplevel):
                                   tags="self.frame")
         self.frame.bind("<Configure>", self.setting)
         self.bind("<MouseWheel>", self.wheel)
+        self.bind("<Button-1>", self.flat)
         self.list_note()
 
     def list_note(self):
@@ -383,9 +406,10 @@ class NoteStorage(Toplevel):
             
             self.back = LabelFrame(self.frame, bg=color, width=410, height=115)
             self.button = Button(self.frame, text=num, fg='white', bg='#ff8400',
-                                 relief=FLAT, width=3,
-                                 font=('Arial', 16, 'bold'),
-                                 command=lambda i=i: self.open_page(i[0]))
+                                 relief=FLAT, width=3, activebackground='#DE7300'
+                                 , font=('Arial', 16, 'bold'),
+                                 command=lambda i=i: self.open_page(i[0]),
+                                 activeforeground='white')
             self.paper = Label(self.frame, image=self.papers, bg=color)
             self.title = Label(self.frame, text=i[0], bg='#fff6aa',
                                font=('AngsanaUPC', 15, 'bold'))
@@ -422,6 +446,10 @@ class NoteStorage(Toplevel):
     def setting(self, event):
         """Config scrollbar react with canvas"""
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+
+    def flat(self, event):
+        """Event widget flat"""
+        event.widget.config(relief=FLAT)
 
 
 class Note(Toplevel):
