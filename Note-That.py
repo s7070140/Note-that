@@ -310,8 +310,8 @@ class NoteCreate(Toplevel):
     """
     def __init__(self):
         Toplevel.__init__(self)
-        self.bg_page = PhotoImage(file="Image/bg_note.gif")
-        self.favorite_logo = PhotoImage(file="Image/favorite.gif")
+        self.bg_page = PhotoImage(file="Image/note_bg1.gif")
+        self.favorite_logo = PhotoImage(file="Image/favorite2.gif")
 
     def note_page(self, text_title, text_note, favorite):
         """Display a Note when add new note or edit note"""
@@ -323,11 +323,10 @@ class NoteCreate(Toplevel):
             self.destroy()
         
         self.background = Label(self, image=self.bg_page)
-        self.decorate = Frame(self, bg='#FF8400', width=350, height=50)
-        self.new_note = Label(self.decorate, text=text_title,
-                              bg='#FF8400', fg='white',
+        self.new_note = Label(self, text=text_title,
+                              bg='#efe9dc', fg='#f46b2f',
                               font=('AngsanaUPC', 24, 'bold'))
-        self.txt = ScrolledText(self, width=47, height=13, bg='#FFECA5',\
+        self.txt = ScrolledText(self, width=44, height=13, bg='#efe9dc',\
                                 font=('AngsanaUPC', 14), relief=FLAT)
         self.txt.insert('1.0', text_note)
         self.txt.config(state='disable')
@@ -341,15 +340,14 @@ class NoteCreate(Toplevel):
                              'white', command=self.destroy)
         
         self.background.place(x=0, y=0)
-        self.decorate.place(x=0, y=0)
-        self.new_note.place(x=15, y=0)
-        self.txt.place(x=25, y=80)
-        self.ok.place(x=140, y=445)
-        self.cancel.place(x=235, y=445)
+        self.new_note.place(x=40, y=40)
+        self.txt.place(x=25, y=100)
+        self.ok.place(x=80, y=455)
+        self.cancel.place(x=190, y=455)
         
         if favorite == 1:
-            self.favor = Label(self, image=self.favorite_logo, bg='#FF8400')
-            self.favor.place(x=286, y=-1)
+            self.favor = Label(self, image=self.favorite_logo, bg='#efe9dc')
+            self.favor.place(x=266, y=40)
 
         self.bind("<Button-1>", self.flat)
         
@@ -387,7 +385,6 @@ class NoteStorage(Toplevel):
                                   tags="self.frame")
         self.frame.bind("<Configure>", self.setting)
         self.bind("<MouseWheel>", self.wheel)
-        self.bind("<Button-1>", self.flat)
         self.list_note()
 
     def list_note(self):
@@ -447,10 +444,6 @@ class NoteStorage(Toplevel):
         """Config scrollbar react with canvas"""
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
-    def flat(self, event):
-        """Event widget flat"""
-        event.widget.config(relief=FLAT)
-
 
 class Note(Toplevel):
     """
@@ -460,7 +453,7 @@ class Note(Toplevel):
     def __init__(self, window=None):
         Toplevel.__init__(self, window=None)
         self.background = PhotoImage(file='Image/note_bg1.gif')
-        self.image = PhotoImage(file='Image/favorite.gif')
+        self.image = PhotoImage(file='Image/favorite2.gif')
         self.window = window
 
     def my_note(self, title):
@@ -468,10 +461,9 @@ class Note(Toplevel):
         data = get_data()[title]
         data = get_data()[title]
         self.bg = Label(self, image=self.background)
-        self.header = Frame(self, bg='#FF8400', width=350, height=50)
-        self.title = Label(self.header, text=title, bg='#FF8400', fg='white',
+        self.title = Label(self, text=title, fg='#f46b2f', bg='#efe9dc',
                            font=('AngsanaUPC', 24, 'bold'))
-        self.txt = ScrolledText(self, width=47, height=15, bg='#FFECA5',\
+        self.txt = ScrolledText(self, width=44, height=13, bg='#efe9dc',\
                                 font=('AngsanaUPC', 14), relief=FLAT)
         self.txt.insert('1.0', data[0])
         self.txt.config(state='disable')
@@ -495,16 +487,15 @@ class Note(Toplevel):
         self.edit.bind("<Leave>", self.button_edit2)
         
         self.bg.place(x=-2, y=0)
-        self.header.place(x=0, y=0)
-        self.title.place(x=10, y=-1)
+        self.title.place(x=40, y=40)
         self.ok.place(x=236, y=472)
         self.delete.place(x=0, y=472)
-        self.txt.place(x=25, y=65)
+        self.txt.place(x=25, y=100)
         self.edit.place(x=114, y=472)
         
         if data[2] == '1':
-            self.favor = Label(self, image=self.image, bg='#FF8400')
-            self.favor.place(x=286, y=-1)
+            self.favor = Label(self, image=self.image, bg='#efe9dc')
+            self.favor.place(x=266, y=40)
 
     def delete_select(self, title):
         """Delete data and destroy current window"""
