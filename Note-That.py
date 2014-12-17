@@ -480,7 +480,7 @@ class Note(Toplevel):
                              activebackground='#C62F2F', command=lambda
                              title=title: self.delete_select(title))
         self.edit = Button(self, text='Edit', bg='white', font=('Arial', 10, 'bold'),
-                           activebackground='white', command=self.make_edit,
+                           activebackground='#747474', command=self.make_edit,
                            relief=FLAT, width=14)
 
         self.ok.bind("<Enter>", self.button_ok1)
