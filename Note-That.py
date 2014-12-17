@@ -507,12 +507,13 @@ class Note(Toplevel):
         if ask == 'yes':
             delete_data(title)
             self.destroy()
-            self.window.destroy()
-            note_store = NoteStorage()
-            note_store.geometry('450x600+450+90')
-            note_store.title('Note Storage')
-            note_store.resizable(width=False, height=False)
-            note_store.all_note()
+            if self.window != None:
+                self.window.destroy()
+                note_store = NoteStorage()
+                note_store.geometry('450x600+450+90')
+                note_store.title('Note Storage')
+                note_store.resizable(width=False, height=False)
+                note_store.all_note()
 
     def check_edit(self, title):
         """replace text if text have change else destroy current page"""
