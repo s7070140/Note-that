@@ -185,7 +185,7 @@ class MainApp(Tk):
             else:
                 count += 1
         
-        if title_name != '' and note_text != '':
+        if title_name != '' and note_text != '' and len(title_name) <= 30:
             if count != len(get_data()):
                 ask = tkMessageBox.askquestion\
                       ("Replace note", "Are you want to replace?",
@@ -206,6 +206,10 @@ class MainApp(Tk):
                 note_page.title('New note' + ' ' + ':' + ' ' + title_name)
                 note_page.resizable(width=False, height=False)
                 note_page.note_page(title_name, note_text, favorite)
+
+        elif len(title_name) > 30:
+                error = tkMessageBox.showerror('Error', 'Your title is too long!')
+        
         else:
             error = tkMessageBox.showerror('Error', 'Please input your note!')
 
@@ -325,7 +329,7 @@ class NoteCreate(Toplevel):
         self.background = Label(self, image=self.bg_page)
         self.new_note = Label(self, text=text_title,
                               bg='#efe9dc', fg='#f46b2f',
-                              font=('AngsanaUPC', 24, 'bold'))
+                              font=('AngsanaUPC', 18, 'bold'))
         self.txt = ScrolledText(self, width=44, height=13, bg='#efe9dc',\
                                 font=('AngsanaUPC', 14), relief=FLAT)
         self.txt.insert('1.0', text_note)
@@ -340,7 +344,7 @@ class NoteCreate(Toplevel):
                              'white', command=self.destroy)
         
         self.background.place(x=0, y=0)
-        self.new_note.place(x=40, y=40)
+        self.new_note.place(x=30, y=50)
         self.txt.place(x=25, y=100)
         self.ok.place(x=80, y=455)
         self.cancel.place(x=190, y=455)
@@ -462,7 +466,7 @@ class Note(Toplevel):
         data = get_data()[title]
         self.bg = Label(self, image=self.background)
         self.title = Label(self, text=title, fg='#f46b2f', bg='#efe9dc',
-                           font=('AngsanaUPC', 24, 'bold'))
+                           font=('AngsanaUPC', 18, 'bold'))
         self.txt = ScrolledText(self, width=44, height=13, bg='#efe9dc',\
                                 font=('AngsanaUPC', 14), relief=FLAT)
         self.txt.insert('1.0', data[0])
@@ -487,7 +491,7 @@ class Note(Toplevel):
         self.edit.bind("<Leave>", self.button_edit2)
         
         self.bg.place(x=-2, y=0)
-        self.title.place(x=40, y=40)
+        self.title.place(x=30, y=50)
         self.ok.place(x=236, y=472)
         self.delete.place(x=0, y=472)
         self.txt.place(x=25, y=100)
@@ -608,9 +612,7 @@ class About(Toplevel):
         self.button.place(x=100, y=300)
 
 def date():
-    """
-    Return current date
-    """
+    """Return current date"""
     day = int(datetime.date.today().strftime("%d"))
     month = datetime.date.today().strftime("%B")
     year = datetime.date.today().strftime("%Y")
@@ -618,9 +620,7 @@ def date():
     return date_now
 
 def add_data(title, text, datetime, favorite):
-    """
-    Add new data to database
-    """
+    """Add new data to database"""
     new_data = [title, text, datetime, favorite]
     data = sql.connect('Database.db')
     data.text_factory = str
@@ -632,9 +632,7 @@ def add_data(title, text, datetime, favorite):
     data.close()
 
 def delete_data(title):
-    """
-    Delete select data in database
-    """
+    """Delete select data in database"""
     data = sql.connect("Database.db")
     cur = data.cursor()
     cur.execute("DELETE FROM NoteStorage WHERE Title = '%s'" % title)
@@ -642,9 +640,7 @@ def delete_data(title):
     data.close()
 
 def get_data():
-    """
-    Return all data in database as a dict
-    """
+    """Return all data in database as a dict"""
     all_data = {}
     data = sql.connect('Database.db')
     cur = data.cursor()
@@ -673,9 +669,7 @@ def get_data():
         
 
 def get_favorite():
-    '''
-    Return all favorite note
-    '''
+    """Return all favorite note"""
     favor_data = {}
     data = sql.connect('Database.db')
     cur = data.cursor()
@@ -697,5 +691,3 @@ if __name__ == "__main__":
     app.geometry("450x600+450+90")
     app.welcome()
     app.mainloop()
-
-    
