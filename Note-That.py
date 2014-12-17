@@ -407,10 +407,10 @@ class NoteStorage(Toplevel):
             
             self.back = LabelFrame(self.frame, bg=color, width=410, height=115)
             self.button = Button(self.frame, text=num, fg='white', bg='#ff8400',
-                                 relief=FLAT, width=3, activebackground='#DE7300'
-                                 , font=('Arial', 16, 'bold'),
+                                 relief=FLAT, width=3, activebackground='#DE7300',\
+                                 font=('Arial', 16, 'bold'),
                                  command=lambda i=i: self.open_page(i[0]),
-                                 activeforeground='white')
+                                 activeforeground='white', borderwidth=0)
             self.paper = Label(self.frame, image=self.papers, bg=color)
             self.title = Label(self.frame, text=i[0], bg='#fff6aa',
                                font=('AngsanaUPC', 15, 'bold'))
