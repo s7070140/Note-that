@@ -578,7 +578,7 @@ class Note(Toplevel):
         
 
 class About(Toplevel):
-
+    '''about page'''
     def __init__(self):
         Toplevel.__init__(self)
         self.credit()
