@@ -37,11 +37,11 @@ class Home(Tk):
         self.bg = Label(self, image=self.back)
         self.logo_name = Label(self, image=self.logo, bg='#f8f6f4')
         self.button1 = Button(self, image=self.note, bg='#f8f6f4', relief=FLAT,
-                              command=self.main)
+                              command=self.main, borderwidth=0)
         self.button2 = Button(self, image=self.about, bg='#f8f6f4', relief=FLAT,
-                              command=self.credit)
+                              command=self.credit, borderwidth=0)
         self.button3 = Button(self, image=self.exit, bg='#f8f6f4', relief=FLAT,
-                              command=self.destroy)
+                              command=self.destroy, borderwidth=0)
 
         self.bg.place(x=-2, y=-2)
         self.logo_name.place(x=50, y=90)
